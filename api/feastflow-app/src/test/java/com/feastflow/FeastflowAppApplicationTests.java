@@ -1,4 +1,4 @@
-package com.feastflow.feastflow_app;
+package com.feastflow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
