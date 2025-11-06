@@ -1,0 +1,140 @@
+.ff-edit-menu .ff-edit-menu-form>div {
+    padding: 3rem 2rem;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    position: relative;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left::after {
+    content: "";
+    position: absolute;
+    top: 35px;
+    right: -1rem;
+    width: 3px;
+    height: 80%;
+    background: var(--ff-border, #ccc);
+    border-radius: var(--ff-radius-lg);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left>div {
+    display: flex;
+    gap: 1rem;
+    padding-right: 1rem;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left>div label {
+    width: 100%;
+    font-size: var(--ff-font-size-lg);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-control {
+    border: 1px solid var(--ff-border);
+    color: var(--ff-gray);
+    font-size: var(--ff-font-size-lg);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-control:focus {
+    box-shadow: 0 0 0 .25rem var(--ff-muted);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-group .input-group .input-group-text {
+    user-select: none;
+    pointer-events: none;
+    border: 1px solid var(--ff-border);
+    border-right: none;
+    background: var(--ff-white);
+    color: var(--ff-gray);
+    font-weight: var(--ff-font-weight-semibold);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-group .input-group:has(input:focus) {
+    border-radius: var(--ff-radius-sm);
+    box-shadow: 0 0 0 .25rem var(--ff-muted);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-group .input-group input {
+    border-left: none;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-group .input-group input:focus {
+    box-shadow: none;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-left .form-group textarea {
+    resize: none;
+    width: 100%;
+    padding: 0.8rem;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    position: relative;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right label {
+    width: 100%;
+    font-size: var(--ff-font-size-lg);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-allergy-warnings,
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-allergy-ingredients {
+    display: flex;
+    padding-right: 1rem;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container {
+    width: 100%;
+    height: 200px;
+    font-size: var(--ff-font-size-lg);
+    border: 1px solid var(--ff-border);
+    border-radius: var(--ff-radius-md);
+    overflow: scroll;
+    position: relative;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-ul-list {
+    padding: .5rem .8rem;
+    margin: 0;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-list {
+    list-style: none;
+    background: var(--ff-light);
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.25rem;
+    border-radius: var(--ff-radius-md);
+    color: var(--ff-gray);
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list {
+    padding: .5rem .8rem;
+    padding-top: 0;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list input {
+    background: var(--ff-white);
+    border: 1px solid var(--ff-border);
+    border-radius: var(--ff-radius-md);
+    width: 100%;
+    padding: .5rem;
+    margin-bottom: 0.25rem;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list input::placeholder {
+    color: var(--ff-primary);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-btn-remove {
+    color: var(--ff-primary);
+    font-size: var(--ff-font-size-base);
+    font-weight: var(--ff-font-weight-bold);
+}

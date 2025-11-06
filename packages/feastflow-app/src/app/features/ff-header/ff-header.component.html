@@ -1,0 +1,23 @@
+<div class="ff-header">
+  <nav class="ff-header-nav navbar navbar-expand-lg">
+    <div class="ff-header-left navbar-brand d-flex align-items-center gap-2">
+      <img src="assets/images/Logo2.svg" class="d-inline-block align-top mr-2" alt="feastflow logo">
+      <span class="ff-title mb-0">FeastFlow</span>
+    </div>
+    <div class="ff-header-right d-flex justify-content-end align-items-center gap-2">
+      <span class=" ff-user-name nav-link">{{userName}}</span>
+      <div class="ff-user-icon">
+        <ng-container *ngIf="userImg; else defaultIcon">
+          <img [src]="userImg"
+        alt="Account icon showing user's profile image" class="ml-2">
+        </ng-container>
+        <ng-template #defaultIcon>
+          <div class="ff-default-icon">
+            <i class="bi bi-person"></i>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
+  </nav>
+</div>

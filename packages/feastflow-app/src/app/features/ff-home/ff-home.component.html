@@ -1,0 +1,39 @@
+<div>
+    <ff-header userName="Restaurant Manager"></ff-header>
+</div>
+<div class="ff-home">
+    <div class="ff-home-header">
+        <div class="ff-home-header-left">
+            <i class="bi bi-list cursor-pointer mt-1" (click)="onSidebarToggle()"></i>
+            <h5 class="mb-0"> {{homeTitle}}</h5>
+        </div>
+        <div class="ff-home-header-right mt-1">
+            <div class="ff-filter" *ngIf="homeTitle === 'Menu'">
+                <i class="bi bi-sliders2-vertical cursor-pointer"></i>
+            </div>
+            <div class="ff-save"  *ngIf="homeTitle === 'Add Item' || homeTitle === 'Edit Item'">
+                <button class="btn ff-btn ff-btn-secondary btn-save" (click)="onSave()">Save</button>
+                <button class="btn ff-btn ff-btn-secondary btn-cancel" (click)="homeTitle = 'Menu'">x</button>
+            </div>
+        </div>
+    </div>
+    <div class="ff-home-sidebar">
+        <ff-sidebar userRole="restaurantManager" (homeTitle)="onHomeTitleChange($event)"></ff-sidebar>
+    </div>
+    <div class="ff-home-content">
+        <div class="ff-home-table" *ngIf="homeTitle === 'Menu'">
+            <ng-container *ngFor="let category of categories | keyvalue: noSort">
+            <ff-table userRole="restaurantManager" [title]="category.key" [columns]="columns" [data]="category.value" (onEditItem)="onEdit($event)" (onDeleteItem)="onDelete($event)"></ff-table>
+            </ng-container>
+        </div>
+        <div class="ff-home-editmenu" *ngIf="homeTitle === 'Add Item'">
+            <ff-edit-menu #editComponent [isEditable]="false" [categories]="getKeys(categories)"></ff-edit-menu>
+        </div>
+        <div class="ff-home-editmenu" *ngIf="homeTitle === 'Edit Item'">
+            <ff-edit-menu #editComponent [isEditable]="true" [categories]="getKeys(categories)" [menuItem]="editData"></ff-edit-menu>
+        </div>
+    </div>
+    <div class="ff-home-floating" *ngIf="homeTitle === 'Menu'">
+        <ff-floating-btn userRole="restaurantManager"></ff-floating-btn>
+    </div>
+</div>

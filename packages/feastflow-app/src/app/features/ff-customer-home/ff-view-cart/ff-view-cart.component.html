@@ -1,0 +1,9 @@
+<div class="ff-view-cart">
+    <div class="ff-view-cart-table">
+        <ff-table userRole="viewCart" [columns]="columns" [data]="cartItems"></ff-table>
+    </div>
+    <div class="ff-view-cart-control">
+        <button class="btn ff-btn-secondary" (click)="onBack()">Back</button>
+        <button class="btn ff-btn-primary" (click)="placeOrder()">Place Order</button>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div>
+    <ff-header userName="System Manager"></ff-header>
+</div>
+<div class="ff-system-manager">
+    <div class="ff-system-manager-header">
+        <div class="ff-system-manager-header-left">
+            <i class="bi bi-list cursor-pointer mt-1" (click)="onSidebarToggle()"></i>
+            <h5 class="mb-0"> {{homeTitle}}</h5>
+        </div>
+        <div class="ff-system-manager-header-right mt-1">
+            <div class="ff-filter">
+                <i class="bi bi-sliders2-vertical cursor-pointer"></i>
+            </div>
+        </div>
+    </div>
+    <div class="ff-system-manager-sidebar">
+        <ff-sidebar userRole="systemManager" (homeTitle)="onHomeTitleChange($event)"></ff-sidebar>
+    </div>
+    <div class="ff-system-manager-content">
+        <div class="ff-system-manager-table" *ngIf="homeTitle === 'Staff'">
+            <ff-table userRole="systemManager" [columns]="columns" [data]="userData" (onDeleteItem)="onDelete($event)"></ff-table>
+        </div>
+    </div>
+</div>

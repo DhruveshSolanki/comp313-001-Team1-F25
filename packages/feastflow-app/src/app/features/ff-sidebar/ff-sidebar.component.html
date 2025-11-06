@@ -1,0 +1,7 @@
+<div [ngClass]="{'ff-sidebar': true, 'ff-sidebar-collapse': !sidebarOpen}">
+    <ul>
+        <li *ngFor="let item of sidebarItems" (click)="navigateTo(item)">
+            {{ item }}
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,12 @@
+<div class="ff-floating-btn-container">
+    <div class="ff-floating-btn-add" *ngIf="userRole === 'restaurantManager'">
+        <button class="btn ff-floating-btn" (click)="addWarning()">
+            <i class="bi bi-plus d-flex"></i>
+        </button>
+    </div>
+    <div class="ff-floating-btn-cart" *ngIf="userRole === 'customer'">
+        <button class="btn ff-floating-btn" (click)="addToCart()">
+            <i class="bi bi-cart d-flex"></i>
+        </button>
+    </div>
+</div>
