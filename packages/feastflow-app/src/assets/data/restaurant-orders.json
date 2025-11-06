@@ -1,0 +1,36 @@
+{
+    "version": "1.0.0",
+    "description": "A JSON file representing restaurant orders with details about items, quantities, and status.",
+    "author": "FeastFlow Team",
+    "license": "MIT",
+    "lastUpdated": "2023-10-01",
+    "restaurantName": "FeastFlow Bistro",
+    "cuisine": "Italian",
+    "location": "Downtown",
+    "contact": {
+        "phone": "+1234567890",
+        "email": "contact@feastflowbistro.com"
+    },
+    "orders": [
+        {
+            "orderId": 101,
+            "table": 5,
+            "itemName": "Garlic Bread",
+            "quantity": 2,
+            "category": "Orders in Progress",
+            "status": "Preparing",
+            "servedAt": null,
+            "note": "Extra garlic, please"
+        },
+        {
+            "orderId": 102,
+            "table": 3,
+            "itemName": "Margarita Pizza",
+            "quantity": 1,
+            "category": "Orders Served",
+            "status": "Served",
+            "servedAt": "2023-10-01T12:05:00Z",
+            "note": "No basil"
+        }
+    ]
+}

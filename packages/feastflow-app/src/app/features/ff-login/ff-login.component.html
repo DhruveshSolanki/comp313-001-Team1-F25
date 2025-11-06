@@ -1,0 +1,62 @@
+<div class="ff-login container d-flex justify-content-center">
+    <div class="ff-login-container-right d-flex flex-column">
+        <div class="ff-logo-container ff-flex flex-column">
+            <div class="ff-logo-img d-flex justify-content-center">
+                <img src="assets/images/Logo1.svg" alt="FeastFlow Logo">
+            </div>
+            <div class="ff-logo-text d-flex flex-column text-center mt-2">
+                <h1>FeastFlow</h1>
+                <p>Dine where you belong </p>
+            </div>
+        </div>
+        <div class="ff-grp-img d-flex justify-content-center">
+            <img src="assets/images/cheifs-group.png" alt="Group Image">
+        </div>
+    </div>
+    <div class="ff-login-container-left">
+        <div class="ff-login-form-container ff-flex flex-column">
+            <div class="ff-logo-container ff-flex flex-column">
+                <div class="ff-logo-img d-flex justify-content-center">
+                    <img src="assets/images/Logo2.svg" alt="FeastFlow Logo">
+                </div>
+                <div class="ff-logo-text d-flex flex-column text-center mt-2">
+                    <h1>Welcome!</h1>
+                </div>
+            </div>
+            <div class="ff-login-form d-flex justify-content-center">
+                <form class="ff-login-form-control-grp d-flex flex-column align-items-center gap-4"
+                    [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+                    <div class="ff-login-form-control form-group">
+                        <span class="ff-form-icon"><i class="bi bi-person"></i></span>
+                        <input class="form-control" type="email" id="email" formControlName="email"
+                            placeholder="Enter Email" [class.is-invalid]="email?.invalid && email?.touched">
+                        <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                            <small *ngIf="email?.errors?.['required']">Email is required</small>
+                            <small *ngIf="email?.errors?.['email']">Please enter a valid email</small>
+                        </div>
+                    </div>
+
+                    <div class="ff-login-form-control form-group">
+                        <span class="ff-form-icon"><i class="bi bi-lock"></i></span>
+                        <input class="form-control" type="password" id="password" formControlName="password"
+                            placeholder="Password" [class.is-invalid]="password?.invalid && password?.touched">
+                        <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+                            <small *ngIf="password?.errors?.['required']">Password is required</small>
+                            <small *ngIf="password?.errors?.['minlength']">Password must be at least 6
+                                characters</small>
+                        </div>
+                    </div>
+
+                    <div class="ff-login-form-btn d-flex flex-column justify-content-center align-items-center">
+                        <button type="submit" class="ff-btn ff-btn-primary mt-3" [disabled]="loginForm.invalid">
+                            Login
+                        </button>
+                        <p class="mt-3 mb-1">Don't have an account? <a href="/signup">Sign Up</a></p>
+                        <p>Forgot Password? <a href="/forgot-password">Reset Here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

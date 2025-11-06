@@ -1,0 +1,144 @@
+<div class="ff-table">
+    <div class="ff-table-header" [style.visibility]="title ? 'visible' : 'hidden'">
+        <h3>{{title || 'No Title'}}</h3>
+    </div>
+    <table class="table ff-table-body">
+        <thead>
+            <tr>
+                <th *ngFor="let column of columns"> <ng-container [ngSwitch]="column">
+                        <ng-container *ngSwitchCase="'Actions'">
+                            <span
+                                *ngIf="userRole === 'restaurantStaff' && title === 'Orders Served'; else actionsHeader">Served
+                                At</span>
+                            <ng-template #actionsHeader>
+                                {{column}}
+                            </ng-template>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                            {{ column }}
+                        </ng-container>
+                    </ng-container></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="data && data.length; else noData">
+                <ng-container *ngFor="let item of data">
+                    <tr>
+                        <td *ngFor="let key of tableDataKeys">
+                            <ng-container [ngSwitch]="key">
+                                <ng-container *ngSwitchCase="'itemName'">
+                                    <div>{{ item[key] }}
+                                        <span *ngIf="userRole === 'orderStatus'">{{ '&nbsp;x' + item.quantity }}</span>
+                                    </div>
+                                    <div class="ff-item-description text-muted"
+                                        *ngIf="item.description && userRole === 'customer'">
+                                        {{ item.description }}
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'price'">
+                                    {{ item[key] | currency }}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'quantity'">
+                                    {{ userRole==='restaurantStaff' ? 'x' + item[key] || 0 : item[key] || 0 }}
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'allergens'">
+                                    <span *ngIf="item.allergens && item.allergens.length; else noAllergens">
+                                        {{ item.allergens.join(', ') }}
+                                    </span>
+                                    <ng-template #noAllergens>-</ng-template>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'status'">
+                                    <span class="ff-order-status"
+                                        [ngClass]="{
+                                            'bg-secondary': item[key] === 'Served',
+                                            'bg-primary': item[key] === 'In Queue',
+                                            'bg-danger': item[key] === 'Cancelled',
+                                            'bg-success': item[key] === 'Ready',
+                                            'bg-warning': item[key] === 'Preparing'
+                                        }">{{ item[key] }}</span>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{ item[key] }}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="d-flex gap-2"
+                            *ngIf="['restaurantManager', 'restaurantStaff', 'systemManager'].includes(userRole) && title !== 'Orders Served'">
+                            <a title="Edit" class="ff-table-action cursor-pointer" (click)="onEdit(item)"
+                                *ngIf="['restaurantManager', 'systemManager'].includes(userRole)">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a title="Edit" class="ff-table-action cursor-pointer" (click)="onEdit(item)"
+                                *ngIf="userRole === 'restaurantStaff'">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a title="Delete" class="ff-table-action cursor-pointer" (click)="onDelete(item)">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                        <td class="d-flex gap-2"
+                            *ngIf="['restaurantStaff'].includes(userRole) && title === 'Orders Served'">
+                            <ng-container *ngIf="item.servedAt">
+                                {{ item.servedAt | date: 'short' }}
+                            </ng-container>
+                        </td>
+                        <td class="d-flex gap-2" *ngIf="userRole === 'customer' || userRole === 'viewCart'">
+                            <ng-container
+                                *ngIf="userRole === 'customer' && 1 > getCartItemQuantity(item); else quantityControls">
+                                <a title="Add to cart" class="ff-table-action cursor-pointer"
+                                    (click)="onAddToCart(item)">
+                                    <i class="bi bi-cart"></i>
+                                </a>
+                            </ng-container>
+
+                            <!-- Show + count - controls -->
+                            <ng-template #quantityControls>
+                                <div class="d-flex align-items-center gap-2 ff-action-group">
+                                    <button class="btn btn-sm" (click)="decreaseQuantity(item)">-</button>
+                                    <span>{{ getCartItemQuantity(item) }}</span>
+                                    <button class="btn btn-sm" (click)="increaseQuantity(item)">+</button>
+                                </div>
+                            </ng-template>
+                        </td>
+
+                        <td class="d-flex gap-2"
+                            *ngIf="userRole === 'orderStatus'">
+                                <div class="btn-group">
+                                    <button type="button" (click)="onStatusChange(item, item.statusOption); $event.preventDefault();" class="btn ff-btn-secondary">
+                                        {{ item.statusOption || 'Change Status' }}
+                                    </button>
+                                    <button type="button" class="btn ff-btn-secondary dropdown-toggle dropdown-toggle-split" id="statusDropdown{{item.orderId}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu" [attr.aria-labelledby]="'statusDropdown' + item.orderId">
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'In Queue'); $event.preventDefault();">Mark As In Queue</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'Preparing'); $event.preventDefault();">Mark As Preparing</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'Ready'); $event.preventDefault();">Mark As Ready</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'Cancelled'); $event.preventDefault();">Mark As Cancelled</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'Served'); $event.preventDefault();">Mark As Served</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+            <ng-template #noData>
+                <tr>
+                    <td [attr.colspan]="columns.length">No {{ title || 'data available' }}...</td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
+</div>

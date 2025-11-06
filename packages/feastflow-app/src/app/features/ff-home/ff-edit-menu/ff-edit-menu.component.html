@@ -1,0 +1,67 @@
+<div class="ff-edit-menu">
+    <form class="ff-edit-menu-form d-flex" [formGroup]="menuItemForm">
+        <div class="ff-edit-menu-left col-md-6">
+            <div class="form-group">
+                <label for="itemName" class="">Item Name:</label>
+                <input type="text" id="itemName" formControlName="itemName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" formControlName="category" class="form-control">
+                    <option value="" disabled selected>Select Category</option>
+                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="user-select: none; pointer-events: none;">$</span>
+                    <input type="number" id="price" formControlName="price" class="form-control" min="0" step="0.01" />
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea id="description" formControlName="description" class="form-control" rows="5"
+                    placeholder="Write something about menu..."></textarea>
+            </div>
+        </div>
+        <div class="ff-edit-menu-right col-md-6">
+            <div class="ff-allergy-warnings">
+                <label for="allergens">Allergy Warnings:</label>
+                <div class="ff-list-container">
+                    <ul class="ff-ul-list">
+                        <li class="ff-list" *ngFor="let warningCtrl of allergens.controls; let i = index">
+                            {{ warningCtrl.value }}
+                            <div>
+                                <button type="button" class="btn btn-sm ff-btn-remove"
+                                    (click)="addWarning(true, i)"><i class="bi bi-pencil-square"></i></button>
+                                <button type="button" class="btn btn-sm ff-btn-remove"
+                                (click)="removeWarning(i)">X</button>
+                            </div>                      
+                        </li>
+                    </ul>
+                    <div class="ff-add-list">
+                        <input type="text" class="form-control" formControlName="newAllergen" (keyup.enter)="addWarning()" placeholder="+ Add Warnings" />
+                    </div>
+                </div>
+            </div>
+            <div class="ff-allergy-ingredients">
+                <label for="ingredients">Ingredients:</label>
+                <div class="ff-list-container">
+                    <ul class="ff-ul-list">
+                        <li class="ff-list" *ngFor="let ingredientCtrl of ingredients.controls; let i = index">
+                            {{ ingredientCtrl.value }}
+                           <div>
+                                <button type="button" class="btn btn-sm ff-btn-remove"
+                                    (click)="addIngredient(true, i)"><i class="bi bi-pencil-square"></i></button>
+                                <button type="button" class="btn btn-sm ff-btn-remove"
+                                (click)="removeIngredient(i)">X</button>
+                            </div>  
+                    </ul>
+                    <div class="ff-add-list">
+                        <input type="text" class="form-control" formControlName="newIngredient" (keyup.enter)="addIngredient()" placeholder="+ Add Ingredient" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

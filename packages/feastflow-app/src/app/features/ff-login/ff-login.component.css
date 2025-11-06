@@ -1,0 +1,151 @@
+.ff-login {
+    padding-top: 20px;
+}
+
+.ff-login .ff-login-container-right {
+    background-color: var(--ff-primary);
+    border-radius: var(--ff-radius-md);
+    width: 50%;
+    margin: 20px;
+    padding-top: 5%;
+    color: var(--ff-white);
+}
+
+.ff-login .ff-login-container-left {
+    background-color: var(--ff-primary);
+    border: 12px;
+    border-radius: var(--ff-radius-md);
+    width: 50%;
+    margin: 20px;
+    padding: 20px;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container {
+    background-color: var(--ff-white);
+    border: 12px;
+    border-radius: var(--ff-radius-lg);
+    padding: 20px;
+    padding-top: 10%;
+    height: 100%;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form {
+    margin-top: 2rem;
+
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp {
+    width: 80%;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp input {
+    border: 2px solid var(--ff-border);
+    border-radius: var(--ff-radius-lg);
+    padding: 12px;
+    padding-left: 40px;
+    font-size: var(--ff-font-size-lg);
+    color: var(--ff-text);
+    font-weight: var(--ff-font-weight-light);
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp input::placeholder {
+    color: var(--ff-muted);
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp input:focus,
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp input:active {
+    box-shadow: var(--ff-shadow-regular);
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp .ff-login-form-control,
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn {
+    position: relative;
+    width: 100%;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp span {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: var(--ff-font-size-lg);
+    color: var(--ff-muted);
+    pointer-events: none;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn .ff-btn.ff-btn-primary{
+    width: 100%;
+    padding: 8px;
+    border-radius: var(--ff-radius-lg);
+    font-size: var(--ff-font-size-lg);
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn p {
+    color: var(--ff-gray);
+    font-size: var(--ff-font-size-lg);
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn p:nth-child(3) {
+    cursor: pointer;
+}
+
+.ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn p a {
+    color: var(--ff-primary);
+    text-decoration: none;
+    font-weight: var(--ff-font-weight-medium);
+    cursor: pointer;
+}
+
+.ff-login .ff-logo-text>h1 {
+    font-weight: var(--ff-font-weight-light);
+    font-size: calc(var(--ff-font-size-lg) + 30px);
+    letter-spacing: calc(var(--ff-space-xs) + 1px);
+}
+
+.ff-login .ff-logo-text>p {
+    font-size: var(--ff-font-size-base);
+    letter-spacing: calc(var(--ff-space-xs) - 1px);
+}
+
+.ff-login .ff-grp-img>img {
+    width: 497px;
+    height: 357px;
+    margin-top: 5rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .ff-login .ff-grp-img>img {
+        width: 397px;
+        height: 257px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ff-login .ff-login-container-right {
+        display: none !important;
+    }
+
+    .ff-login .ff-login-container-left {
+        width: 80%;
+    }
+}
+
+@media (max-width: 425px) {
+    .ff-login .ff-login-container-left {
+        width: 100%;
+    }
+
+    .ff-login .ff-login-container-left .ff-login-form-container .ff-login-form-btn p {
+        color: var(--ff-gray);
+        font-size: calc(var(--ff-font-size-sm) - 5px);
+    }
+
+    .ff-login .ff-logo-text>h1 {
+        font-size: var(--ff-font-size-lg);
+    }
+
+    .ff-login .ff-login-container-left .ff-login-form-container .ff-login-form .ff-login-form-control-grp input{
+        font-size: var(--ff-font-size-base);
+    }
+}

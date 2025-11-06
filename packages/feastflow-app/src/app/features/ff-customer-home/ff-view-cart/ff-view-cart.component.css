@@ -1,0 +1,13 @@
+.ff-view-cart .ff-view-cart-control {
+    display: flex;
+    gap: .5rem;
+    justify-content: end;
+    margin-right: 2.5rem;
+    position: absolute;
+    bottom: 5rem;
+    right: 1rem;
+}
+
+.ff-view-cart .ff-view-cart-control button {
+    width: 150px;
+}

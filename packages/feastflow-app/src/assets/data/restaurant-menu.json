@@ -1,0 +1,90 @@
+{
+  "version": "1.0.0",
+  "description": "A JSON file representing a restaurant menu with items, categories, and prices.",
+  "author": "FeastFlow Team",
+  "license": "MIT",
+  "lastUpdated": "2023-10-01",
+  "menuType": "Restaurant",
+  "restaurantName": "FeastFlow Bistro",
+  "cuisine": "Italian",
+  "location": "Downtown",
+  "contact": {
+    "phone": "+1234567890",
+    "email": "contact@feastflowbistro.com"
+  },
+  "data": [
+    {
+      "itemId": 1,
+      "itemName": "Garlic Bread",
+      "category": "Appetizers",
+      "price": 4.99,
+      "description": "Crispy garlic bread with a hint of parsley.",
+      "allergens": ["Gluten", "Dairy"],
+      "ingredients": ["Bread", "Garlic", "Butter", "Parsley"]
+    },
+    {
+      "itemId": 2,
+      "itemName": "Bruschetta",
+      "category": "Appetizers",
+      "price": 6.49,
+      "description": "Grilled bread topped with diced tomatoes, garlic, and basil.",
+      "allergens": ["Gluten"],
+      "ingredients": ["Bread", "Tomatoes", "Garlic", "Basil"]
+    },
+    {
+      "itemId": 3,
+      "itemName": "Stuffed Mushrooms",
+      "category": "Appetizers",
+      "price": 7.25,
+      "description": "Mushrooms stuffed with a savory mixture of cheeses and herbs.",
+      "allergens": ["Dairy"],
+      "ingredients": ["Mushrooms", "Cheese", "Herbs"]
+    },
+    {
+      "itemId": 4,
+      "itemName": "Caprese Salad",
+      "category": "Appetizers",
+      "price": 5.99,
+      "description": "Fresh mozzarella, tomatoes, and basil drizzled with balsamic glaze.",
+      "allergens": [],
+      "ingredients": ["Mozzarella", "Tomatoes", "Basil", "Balsamic Glaze"]
+    },
+    {
+      "itemId": 5,
+      "itemName": "Margarita Pizza",
+      "category": "Mains",
+      "price": 10.99,
+      "description": "Classic pizza with fresh mozzarella, tomatoes, and basil.",
+      "allergens": ["Gluten"],
+      "ingredients": ["Mozzarella", "Tomatoes", "Basil", "Pizza Dough"]
+    },
+    {
+      "itemId": 6,
+      "itemName": "Pasta Alfredo",
+      "category": "Mains",
+      "price": 12.99,
+      "description": "Creamy fettuccine Alfredo with parmesan cheese.",
+      "allergens": ["Gluten", "Dairy"],
+      "ingredients": ["Fettuccine", "Alfredo Sauce", "Parmesan Cheese"]
+    },
+    {
+      "itemId": 7,
+      "itemName": "Tiramisu",
+      "category": "Desserts",
+      "price": 5.99,
+      "description": "Classic Italian dessert made with coffee-soaked ladyfingers and mascarpone cheese.",
+      "allergens": ["Gluten", "Dairy"],
+      "ingredients": ["Ladyfingers", "Coffee", "Mascarpone Cheese", "Cocoa Powder"]
+    },
+    {
+      "itemId": 8,
+      "itemName": "Gelato",
+      "category": "Desserts",
+      "price": 4.49,
+      "description": "Creamy Italian ice cream available in various flavors.",
+      "allergens": ["Dairy"],
+      "ingredients": ["Milk", "Sugar", "Flavoring"]
+    }
+  ]
+}
+

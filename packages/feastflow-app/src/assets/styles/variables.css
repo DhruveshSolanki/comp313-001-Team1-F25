@@ -1,0 +1,50 @@
+:root {
+  /* === COLORS === */
+  --ff-primary: #6D9F71;
+  /* Main red (headers, buttons, background) */
+  --ff-secondary: #f8f3f3;
+  /* Background color */
+  --ff-border: #6D9F71;
+  /* Border color */
+  --ff-text: #6D9F71;
+  /* Main text color */
+  --ff-muted: rgba(109, 159, 113, 0.5);
+  /* Secondary text (e.g., placeholder) */
+  --ff-white: #ffffff;
+  --ff-light: #eaf5eb;
+  --ff-gray: rgba(0, 0, 0, 0.6);
+  --ff-hover: #56875b;
+
+  /* === FONT === */
+  --ff-font-family: 'League Spartan', sans-serif;
+  --ff-font-size-base: 16px;
+  --ff-font-size-sm: 14px;
+  --ff-font-size-lg: 20px;
+
+  /* === FONT WEIGHTS === */
+  --ff-font-weight-thin: 100;
+  --ff-font-weight-light: 300;
+  --ff-font-weight-regular: 400;
+  --ff-font-weight-medium: 500;
+  --ff-font-weight-semibold: 600;
+  --ff-font-weight-bold: 700;
+  --ff-font-weight-extrabold: 800;
+  --ff-font-weight-black: 900;
+
+  /* === SPACING === */
+  --ff-space-xs: 4px;
+  --ff-space-sm: 8px;
+  --ff-space-md: 16px;
+  --ff-space-lg: 24px;
+  --ff-space-xl: 32px;
+
+  /* === BORDER RADIUS === */
+  --ff-radius-sm: 4px;
+  --ff-radius-md: 8px;
+  --ff-radius-lg: 16px;
+
+  /* === SHADOWS === */
+  --ff-shadow-regular: 0 0 12px 2px #6D9F71;
+  --ff-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ff-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.15);
+}

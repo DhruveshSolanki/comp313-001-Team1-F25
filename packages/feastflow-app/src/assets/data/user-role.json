@@ -1,0 +1,51 @@
+{
+    "version": "1.0.0",
+    "description": "A JSON file defining user userRoles and their permissions within the DineMart application.",
+    "author": "FeastFlow Team",
+    "license": "MIT",
+    "lastUpdated": "2024-06-15",
+    "userRoles": [
+        {
+            "userId": "KIT101",
+            "userEmail": "maria.gonzalez@dinemart.com",
+            "userName": "Maria Gonzalez",
+            "userRole": "Kitchen Staff",
+            "userStatus": "Active"
+        },
+        {
+            "userId": "KIT102",
+            "userEmail": "james.patel@dinemart.com",
+            "userName": "James Patel",
+            "userRole": "Kitchen Staff",
+            "userStatus": "Active"
+        },
+        {
+            "userId": "SER203",
+            "userEmail": "alisha.mehta@dinemart.com",
+            "userName": "Alisha Mehta",
+            "userRole": "Server",
+            "userStatus": "Inactive"
+        },
+        {
+            "userId": "SER204",
+            "userEmail": "davuserId.chen@dinemart.com",
+            "userName": "DavuserId Chen",
+            "userRole": "Server",
+            "userStatus": "Active"
+        },
+        {
+            "userId": "MGR901",
+            "userEmail": "ahmed.khan@dinemart.com",
+            "userName": "Ahmed Khan",
+            "userRole": "System Manager",
+            "userStatus": "Active"
+        },
+        {
+            "userId": "MGR902",
+            "userEmail": "sophia.lee@dinemart.com",
+            "userName": "Sophia Lee",
+            "userRole": "Restaurant Manager",
+            "userStatus": "Active"
+        }
+    ]
+}

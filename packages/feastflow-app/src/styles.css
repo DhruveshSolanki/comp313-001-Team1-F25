@@ -1,0 +1,49 @@
+@import './assets/styles/variables.css';
+
+body {
+    font-family: var(--ff-font-family);
+    background-color: var(--ff-white);
+    color: var(--ff-primary);
+}
+
+/* === BUTTON STYLES === */
+.ff-btn {
+    padding: 8px;
+    width: 120px;
+}
+
+.ff-btn-primary {
+    background-color: var(--ff-primary);
+    border: var(--ff-border);
+    border-radius: var(--ff-radius-sm);
+    color: var(--ff-white);
+}
+
+.ff-btn-primary:hover,
+.ff-btn-primary:focus,
+.ff-btn-primary:active {
+    background-color: var(--ff-hover);
+    color: var(--ff-white);
+}
+
+.ff-btn-secondary {
+    background-color: var(--ff-white);
+    border: 1px solid var(--ff-border);
+    border-radius: var(--ff-radius-sm);
+    color: var(--ff-primary);
+}
+
+.ff-btn-secondary:hover,
+.ff-btn-secondary:focus,
+.ff-btn-secondary:active {
+    background-color: var(--ff-light);
+    color: var(--ff-primary);
+}
+
+/* === CURSOR UTILITIES === */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+
+/* Main content area styles for ff-home component */
