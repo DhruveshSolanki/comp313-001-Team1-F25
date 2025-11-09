@@ -1,6 +1,5 @@
 package com.feastflow.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,20 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
+@Document(collection = "carts")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
+    private String cartId;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @DBRef
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @DBRef
     private List<CartItem> cartItems;
 }

@@ -1,27 +1,28 @@
 package com.feastflow.model;
 
-import jakarta.persistence.*;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Document(collection = "cart_items")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartItemId;
+    private String cartItemId;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @DBRef
     private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_item_id")
+    @DBRef
     private RestaurantMenu menuItem;
 
     private Integer quantity;
