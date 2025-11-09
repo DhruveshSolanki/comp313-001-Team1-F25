@@ -3,6 +3,7 @@ package com.feastflow.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import com.feastflow.model.Customer;
 import com.feastflow.model.RestaurantStaff;
 import com.feastflow.model.auth.LoginRequest;
 import com.feastflow.model.auth.LoginResponse;
+import com.feastflow.model.auth.RegisterRequest;
 import com.feastflow.repository.ICustomerRepository;
 import com.feastflow.repository.IRestaurantStaffRepository;
 import com.feastflow.security.JwtTokenProvider;
@@ -31,15 +33,18 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final ICustomerRepository customerRepository;
     private final IRestaurantStaffRepository staffRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtTokenProvider jwtTokenProvider,
                           ICustomerRepository customerRepository,
-                          IRestaurantStaffRepository staffRepository) {
+                          IRestaurantStaffRepository staffRepository,
+                          PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.customerRepository = customerRepository;
         this.staffRepository = staffRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -100,5 +105,28 @@ public class AuthController {
         long expiresIn = jwtTokenProvider.getAccessExpirationMillis();
         long refreshExpiresIn = jwtTokenProvider.getRefreshExpirationMillis();
         return ResponseEntity.ok(new LoginResponse(newAccessToken, expiresIn, role, token, refreshExpiresIn));
+    }
+
+    @PostMapping("/register")
+    @Operation(summary = "Register a new customer; then login to obtain tokens")
+    public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
+        String email = request.getEmail();
+        // Check if email already exists among staff or customers
+        if (staffRepository.findByStaffEmail(email).isPresent() ||
+            customerRepository.findByCustomerEmail(email).isPresent()) {
+            return ResponseEntity.status(409).build();
+        }
+
+        // Create and save new customer with hashed password
+    com.feastflow.model.Customer customer = com.feastflow.model.Customer.builder()
+                .customerName(request.getName())
+                .customerEmail(email)
+                .customerPassword(passwordEncoder.encode(request.getPassword()))
+                .customerPhoneNumber(request.getPhoneNumber())
+                .build();
+        customerRepository.save(customer);
+
+        
+        return ResponseEntity.ok().build();
     }
 }

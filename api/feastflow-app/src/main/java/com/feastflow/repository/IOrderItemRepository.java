@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.feastflow.model.CartItem;
+import com.feastflow.model.OrderItem;
 
 @Repository
-public interface ICartItemRepository extends MongoRepository<CartItem, String> {
-	List<CartItem> findByCart_CartId(String cartId);
+public interface IOrderItemRepository extends MongoRepository<OrderItem, String> {
+    List<OrderItem> findByOrder_OrderId(String orderId);
 }
-

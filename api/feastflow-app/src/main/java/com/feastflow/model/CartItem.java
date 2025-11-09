@@ -26,4 +26,6 @@ public class CartItem {
     private RestaurantMenu menuItem;
 
     private Integer quantity;
+
+    private String note;
 }
