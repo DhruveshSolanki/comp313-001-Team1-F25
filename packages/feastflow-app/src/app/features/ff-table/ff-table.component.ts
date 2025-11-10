@@ -1,5 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { CartApiService } from 'src/app/services/api/cart-api.service';
+import { GetCartItems } from 'src/app/store/cart/cart.actions';
 
 @Component({
   selector: 'ff-table',
@@ -92,9 +94,20 @@ export class FfTableComponent implements OnInit {
     }
   }
 
+  constructor(private cartApi: CartApiService, private store: Store) {}
+
   onAddToCart(item: any) {
-    this.cartData.push({ itemId: item.itemId, itemName: item.itemName, price: item.price, note: null, quantity: 1 });
-    this.emitCartDataChange();
+    // Use backend so checkout has items; then refresh store cart state
+    this.cartApi.addItem(String(item.itemId), 1).subscribe({
+      next: () => {
+        this.store.dispatch(new GetCartItems());
+      },
+      error: err => {
+        console.error('[Table] Add to cart failed; falling back to local state', err);
+        this.cartData.push({ itemId: item.itemId, itemName: item.itemName, price: item.price, note: null, quantity: 1 });
+        this.emitCartDataChange();
+      }
+    });
   }
 
   getCartItemQuantity(item: any): number {
@@ -104,26 +117,55 @@ export class FfTableComponent implements OnInit {
 
   // Add method to increase quantity
   increaseQuantity(item: any) {
-    const cartItem = this.cartData.find(cartItem => cartItem.itemID === item.id);
-    if (cartItem) {
-      cartItem.quantity++;
+    const cartItem = this.cartData.find(ci => ci.itemId === item.itemId);
+    if (!cartItem) return;
+    const newQty = (cartItem.quantity ?? 0) + 1;
+    if (cartItem.cartItemId) {
+      this.cartApi.updateItem(cartItem.cartItemId, newQty, cartItem.note).subscribe({
+        next: () => this.store.dispatch(new GetCartItems()),
+        error: () => {
+          cartItem.quantity = newQty; // fallback local
+          this.emitCartDataChange();
+        }
+      });
+    } else {
+      cartItem.quantity = newQty;
+      this.emitCartDataChange();
     }
-    this.emitCartDataChange();
   }
 
   // Add method to decrease quantity
   decreaseQuantity(item: any) {
-    const cartItemIndex = this.cartData.findIndex(cartItem => cartItem.itemID === item.id);
-    if (cartItemIndex !== -1) {
-      const cartItem = this.cartData[cartItemIndex];
-      if (cartItem.quantity > 1) {
-        cartItem.quantity--;
+    const idx = this.cartData.findIndex(ci => ci.itemId === item.itemId);
+    if (idx === -1) return;
+    const cartItem = this.cartData[idx];
+    const newQty = (cartItem.quantity ?? 0) - 1;
+    if (cartItem.cartItemId) {
+      if (newQty <= 0) {
+        this.cartApi.removeItem(cartItem.cartItemId).subscribe({
+          next: () => this.store.dispatch(new GetCartItems()),
+          error: () => {
+            this.cartData.splice(idx, 1); // fallback local
+            this.emitCartDataChange();
+          }
+        });
       } else {
-        // Remove item from cart if quantity becomes 0
-        this.cartData.splice(cartItemIndex, 1);
+        this.cartApi.updateItem(cartItem.cartItemId, newQty, cartItem.note).subscribe({
+          next: () => this.store.dispatch(new GetCartItems()),
+          error: () => {
+            cartItem.quantity = newQty; // fallback local
+            this.emitCartDataChange();
+          }
+        });
       }
+    } else {
+      if (newQty <= 0) {
+        this.cartData.splice(idx, 1);
+      } else {
+        cartItem.quantity = newQty;
+      }
+      this.emitCartDataChange();
     }
-    this.emitCartDataChange();
   }
 
   // Emit cartData changes to parent

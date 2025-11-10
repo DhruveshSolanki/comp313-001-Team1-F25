@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { DeleteUser, EditUser, GetUsers, UserAction } from './user.actions';
 import { CommonHttpRequestService } from 'src/app/services/common-http-request.service';
+import { MenuApiService } from '../../services/api/menu-api.service';
 import { tap } from 'rxjs';
 
 export interface User {
@@ -24,7 +25,7 @@ export interface UserStateModel {
 @Injectable()
 export class UserState {
 
-  constructor(private commonService: CommonHttpRequestService) { }
+  constructor(private commonService: CommonHttpRequestService, private menuApi: MenuApiService) { }
 
   @Selector()
   static getState(state: UserStateModel) {
@@ -46,8 +47,8 @@ export class UserState {
          console.log(response);
          
          ctx.patchState({ items: users });
-        })
-      );
+       })
+     );
     }
 
 

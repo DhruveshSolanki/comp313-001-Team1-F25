@@ -53,7 +53,7 @@ public class OrderService implements IOrderService {
         // Load customer & cart
         Customer customer = customerRepo.findByCustomerEmail(customerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
-        Cart cart = cartRepo.findByCustomer_CustomerEmail(customerEmail)
+        Cart cart = cartRepo.findByCustomer(customer)
                 .orElseThrow(() -> new IllegalStateException("Cart is empty or not found for customer."));
 
         // Load cart items
@@ -115,7 +115,9 @@ public class OrderService implements IOrderService {
         @Override
         public List<Order> list(String status, boolean onlyMine, String customerEmail) {
                 if (onlyMine && customerEmail != null) {
-                        return orderRepo.findByCustomer_CustomerEmail(customerEmail);
+                        Customer customer = customerRepo.findByCustomerEmail(customerEmail)
+                                .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
+                        return orderRepo.findByCustomer_CustomerEmail(customer.getCustomerEmail());
                 }
                 if (status != null && !status.isBlank()) {
                         OrderStatus s = OrderStatus.valueOf(status);

@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Tag(name = "Order API")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/orders")
 public class OrderController {
 

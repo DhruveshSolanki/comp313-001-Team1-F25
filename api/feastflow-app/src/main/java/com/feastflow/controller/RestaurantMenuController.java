@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Tag(name = "Restaurant Menu API", description = "API for managing restaurant menu items")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/restaurantmenu")
 public class RestaurantMenuController {
 

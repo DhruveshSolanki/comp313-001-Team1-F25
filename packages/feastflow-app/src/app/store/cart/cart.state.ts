@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { AddCartItem, DeleteCartItem, EditCartItem, GetCartItems, SetCartItems } from './cart.actions';
 import { CommonHttpRequestService } from 'src/app/services/common-http-request.service';
+import { CartApiService } from '../../services/api/cart-api.service';
 import { tap } from 'rxjs/operators';
 
 export interface CartItem {
-  itemId: number;
+  itemId: number; // display index
+  cartItemId?: string; // backend cart item id
+  menuItemId?: string; // backend menu item id
   itemName: string;
   price: number;
   quantity: number;
@@ -25,7 +28,7 @@ export interface CartStateModel {
 @Injectable()
 export class CartState {
 
-  constructor(private commonService: CommonHttpRequestService) { }
+  constructor(private commonService: CommonHttpRequestService, private cartApi: CartApiService) { }
 
   @Selector()
   static getState(state: CartStateModel) {
@@ -34,10 +37,18 @@ export class CartState {
 
   @Action(GetCartItems)
   getCartItems(ctx: StateContext<CartStateModel>) {
-    return this.commonService.getDataFromAssets('restaurant-cart.json').pipe(
-      tap((response: any) => {
-        const cartItems = response.data || [];
-        ctx.patchState({ items: cartItems });
+    return this.cartApi.getMyCart().pipe(
+      tap(cart => {
+        const mapped = (cart.items || []).map((i: any, idx: number) => ({
+          itemId: idx + 1,
+          cartItemId: i.id,
+          menuItemId: i.menuItemId,
+          itemName: i.name || i.menuItemId,
+          price: i.price ?? 0,
+          quantity: i.quantity ?? 1,
+          note: i.note
+        }));
+        ctx.patchState({ items: mapped });
       })
     );
   }

@@ -35,13 +35,10 @@ public class CartService implements ICartService {
 
     @Override
     public Cart getOrCreateCartForCustomer(String customerEmail) {
-        return cartRepo.findByCustomer_CustomerEmail(customerEmail)
-                .orElseGet(() -> {
-                    Customer customer = customerRepo.findByCustomerEmail(customerEmail)
-                            .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
-                    Cart c = Cart.builder().customer(customer).build();
-                    return cartRepo.save(c);
-                });
+    Customer customer = customerRepo.findByCustomerEmail(customerEmail)
+        .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
+    return cartRepo.findByCustomer(customer)
+        .orElseGet(() -> cartRepo.save(Cart.builder().customer(customer).build()));
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.Map;
 
 @Tag(name = "Reservation API")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
 

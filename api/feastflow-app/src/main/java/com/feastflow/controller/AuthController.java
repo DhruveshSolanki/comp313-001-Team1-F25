@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @Tag(name = "Authentication API")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -128,5 +130,17 @@ public class AuthController {
 
         
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Logout the current user (stateless) — client should delete stored tokens",
+               description = "Since JWT is stateless in this app, the server does not keep session state. This endpoint exists for symmetry and future revocation support. Clients should clear access/refresh tokens locally. If a refresh token is provided in the request body (plain text), it may be validated but is not persisted for revocation in this version.")
+    public ResponseEntity<Void> logout(@RequestBody(required = false) String refreshToken) {
+        // Optionally validate the provided refresh token to ensure it is structurally correct
+        if (refreshToken != null && !refreshToken.isBlank()) {
+            // Best-effort validation; ignore result as we don't persist blacklist in this version
+            try { jwtTokenProvider.validateToken(refreshToken.trim()); } catch (Exception ignored) {}
+        }
+        return ResponseEntity.noContent().build();
     }
 }

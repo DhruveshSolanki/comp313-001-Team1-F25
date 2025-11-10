@@ -5,10 +5,13 @@ import { CommonHttpRequestService } from 'src/app/services/common-http-request.s
 import { tap } from 'rxjs/operators';
 
 export interface MenuItem {
-  itemId: number;
+  itemId: string; // backend Mongo _id
   itemName: string;
   category: string;
   price: number;
+  description?: string;
+  allergens?: string[];
+  ingredients?: string[];
 }
 
 export interface MenuStateModel {
@@ -38,9 +41,13 @@ export class MenuState {
 
   @Action(GetMenuItems)
   getMenuItems(ctx: StateContext<MenuStateModel>) {
+    // Debug: trace menu fetch action firing
+    console.debug('[MenuState] Dispatch GetMenuItems');
     return this.commonService.getRestaurantMenu().pipe(
       tap((response: any) => {
+        // Debug: log raw response length & sample
         const menuItems = response || [];
+        console.debug('[MenuState] Fetched menu items count:', menuItems.length, menuItems[0]);
         ctx.patchState({ items: menuItems });
       })
     );
@@ -86,7 +93,7 @@ export class MenuState {
       next: (response: any) => {
         if (response && response.success) {
           const state = ctx.getState();
-          const filteredItems = state.items.filter((item) => item?.itemId !== menuId);
+          const filteredItems = state.items.filter((item) => String(item?.itemId) !== String(menuId));
           ctx.patchState({ items: filteredItems });
           this.getMenuItems(ctx).subscribe(); // Refresh the menu items after deletion
         }

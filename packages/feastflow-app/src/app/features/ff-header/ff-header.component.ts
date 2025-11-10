@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'ff-header',
@@ -8,5 +10,11 @@ import { Component, Input } from '@angular/core';
 export class FfHeaderComponent {
   @Input() userName?: string;
   userImg: any;
+  constructor(private auth: AuthService, private router: Router) {}
+
+  onLogout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 
 }

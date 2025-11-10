@@ -3,6 +3,7 @@ import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { CommonHttpRequestService } from 'src/app/services/common-http-request.service';
 import { tap } from 'rxjs/operators';
 import { AddOrdersItem, DeleteOrdersItem, EditOrdersItem, GetOrdersItems } from './orders.actions';
+import { OrdersApiService } from '../../services/api/orders-api.service';
 
 export interface OrderItem {
   orderId: number;
@@ -28,7 +29,7 @@ export interface OrdersStateModel {
 @Injectable()
 export class OrdersState {
 
-  constructor(private commonService: CommonHttpRequestService) { }
+  constructor(private commonService: CommonHttpRequestService, private ordersApi: OrdersApiService) { }
 
   @Selector()
   static getState(state: OrdersStateModel) {

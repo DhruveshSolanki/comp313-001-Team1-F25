@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'ff-login',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 export class FfLoginComponent implements OnInit {
   
   loginForm!: FormGroup;
-  constructor(private router: Router) {
+  constructor(private router: Router, private auth: AuthService) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
@@ -26,35 +27,31 @@ export class FfLoginComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const formData = {
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      };
-      // Hardcoded login logic
-      if (formData.email === 'manager@example.com' && formData.password === 'manager123') {
-        // Navigate to manager component
-        this.router.navigate(['/home']);
-        console.log('Navigating to Manager Component');
-      } else if (formData.email === 'staff@example.com' && formData.password === 'staff123') {
-        // Navigate to staff component
-        // Example: this.router.navigate(['/staff']);
-       this.router.navigate(['/restaurant-staff']);
-      } else if (formData.email === 'customer@example.com' && formData.password === 'customer123') {
-        // Navigate to customer component
-        // Example: this.router.navigate(['/customer']);
-        this.router.navigate(['/customer-home']);
-      } else if (formData.email === 'admin@example.com' && formData.password === 'admin123') {
-        // Navigate to admin component
-        this.router.navigate(['/system-manager']);
-      } else {
-        console.log('Invalid credentials');
-      }
-      // Handle login logic here
-    } else {
-      console.log('Form is invalid');
+    if (!this.loginForm.valid) {
       this.markFormGroupTouched();
+      return;
     }
+    const payload = { email: this.email?.value, password: this.password?.value };
+    this.auth.login(payload).subscribe({
+      next: res => {
+        const role = res.role?.toUpperCase();
+        switch (role) {
+          case 'CUSTOMER':
+            this.router.navigate(['/customer-home']); break;
+          case 'MANAGER':
+          case 'ADMIN':
+            this.router.navigate(['/home']); break;
+          case 'CHEF':
+          case 'SERVER':
+            this.router.navigate(['/restaurant-staff']); break;
+          default:
+            this.router.navigate(['/login']);
+        }
+      },
+      error: err => {
+        console.log('Login failed', err);
+      }
+    });
   }
 
   private markFormGroupTouched() {

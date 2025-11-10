@@ -3,6 +3,7 @@ import { Store } from '@ngxs/store';
 import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
 import { SideBarService } from 'src/app/services/side-bar.service';
 import { DeleteOrdersItem, GetOrdersItems } from 'src/app/store/orders/orders.actions';
+import { OrdersApiService } from '../../services/api/orders-api.service';
 import { OrderItem, OrdersState } from 'src/app/store/orders/orders.state';
 
 @Component({
@@ -22,7 +23,8 @@ export class FfRestaurantStaffComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store,
     private sidebarService: SideBarService,
-    private sideBarTitleService: SideBarTitleService) { }
+    private sideBarTitleService: SideBarTitleService,
+    private ordersApi: OrdersApiService) { }
 
   categories: { [category: string]: OrderItem[] } = {};
 
@@ -33,7 +35,8 @@ export class FfRestaurantStaffComponent implements OnInit, OnDestroy {
       this.homeTitle = title;
     });
 
-    this.store.dispatch(new GetOrdersItems());
+  // Dispatch NGXS action to load from backend via OrdersState (now wired to API)
+  this.store.dispatch(new GetOrdersItems());
 
     // Always listen to store updates
     this.store
