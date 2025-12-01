@@ -29,7 +29,7 @@ RUN useradd -r -u 1001 spring
 COPY --from=build /workspace/target/*.jar app.jar
 
 # Cloud Run dynamic port
-ENV PORT=8080
+ENV PORT=8081
 
 # JVM optimizations
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
