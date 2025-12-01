@@ -8,13 +8,13 @@ COPY mvnw* pom.xml ./
 COPY .mvn .mvn
 
 # Download dependencies (will cache)
-RUN ./mvnw -q dependency:go-offline
+RUN chmod +x mvnw && ./mvnw -q dependency:go-offline
 
 # Copy source
 COPY src src
 
 # Build application (skip tests for speed; adjust if you have tests)
-RUN ./mvnw -q package -DskipTests
+RUN ./mvnw -q -B package -DskipTests
 
 ## Runtime stage (slim JRE)
 FROM eclipse-temurin:17-jre-jammy AS run

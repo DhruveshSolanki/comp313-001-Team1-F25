@@ -1,6 +1,8 @@
 # Maven
-.target/
-.mvn/wrapper/maven-wrapper.jar
+target/
+
+# Keep Maven wrapper JAR so Docker builds can run ./mvnw without downloading
+# (do NOT ignore .mvn/wrapper/maven-wrapper.jar)
 
 # Node/Angular (if accidentally copied)
 node_modules/
