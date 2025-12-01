@@ -1,0 +1,25 @@
+# Maven
+.target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Node/Angular (if accidentally copied)
+node_modules/
+**/node_modules/
+
+# IDE/editor
+.idea/
+.vscode/
+*.iml
+
+# OS / misc
+.DS_Store
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+
+# Tests outputs
+surefire-reports/
