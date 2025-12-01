@@ -1,22 +1,24 @@
-## Multi-stage Dockerfile for Spring Boot (Maven) deployment to Google Cloud Run
-## Build stage
+## Multi-stage Dockerfile for Spring Boot (Maven) on Cloud Run
+
+### BUILD STAGE
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /workspace
 
-# Copy Maven wrapper and pom first for layer caching
+# Copy Maven wrapper + pom first
 COPY mvnw* pom.xml ./
 COPY .mvn .mvn
 
-# Download dependencies (will cache)
+# Download dependencies
 RUN chmod +x mvnw && ./mvnw -q dependency:go-offline
 
 # Copy source
 COPY src src
 
-# Build application (skip tests for speed; adjust if you have tests)
+# Build JAR (skip tests for speed)
 RUN ./mvnw -q -B package -DskipTests
 
-## Runtime stage (slim JRE)
+
+### RUNTIME STAGE
 FROM eclipse-temurin:17-jre-jammy AS run
 WORKDIR /app
 
@@ -24,15 +26,15 @@ WORKDIR /app
 RUN useradd -r -u 1001 spring
 
 # Copy built jar
-COPY --from=build /workspace/target/feastflow-app-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /workspace/target/*.jar app.jar
 
-# Expose port (Cloud Run injects $PORT env; we rely on server.port config)
+# Cloud Run dynamic port
+ENV PORT=8080
+
+# JVM optimizations
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
-
-# Healthcheck (optional): expecting actuator if later added
-# HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:8080/actuator/health || exit 1
 
 USER spring
 
-# Run the app; Cloud Run sets PORT so Spring picks it up via server.port=${PORT:8080}
-ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar app.jar"]
+# Run Spring Boot with dynamic Cloud Run port
+ENTRYPOINT ["sh","-c","java $JAVA_OPTS -Dserver.port=${PORT} -jar app.jar"]

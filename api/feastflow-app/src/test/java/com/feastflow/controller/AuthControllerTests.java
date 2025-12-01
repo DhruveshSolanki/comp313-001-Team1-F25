@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import com.feastflow.enums.RestaurantStaffRole;
@@ -17,13 +19,26 @@ import com.feastflow.model.auth.LoginResponse;
 import com.feastflow.repository.ICustomerRepository;
 import com.feastflow.repository.IRestaurantStaffRepository;
 import com.feastflow.security.JwtTokenProvider;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthControllerTests {
 
+    @Mock
     private AuthenticationManager authenticationManager;
+
+    @Mock
     private JwtTokenProvider jwtTokenProvider;
+
+    @Mock
     private ICustomerRepository customerRepository;
+
+    @Mock
     private IRestaurantStaffRepository staffRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @InjectMocks
     private AuthController controller;
 
     @BeforeEach
@@ -32,7 +47,7 @@ public class AuthControllerTests {
         jwtTokenProvider = mock(JwtTokenProvider.class);
         customerRepository = mock(ICustomerRepository.class);
         staffRepository = mock(IRestaurantStaffRepository.class);
-        controller = new AuthController(authenticationManager, jwtTokenProvider, customerRepository, staffRepository);
+        controller = new AuthController(authenticationManager, jwtTokenProvider, customerRepository, staffRepository, passwordEncoder);
     }
 
     @Test

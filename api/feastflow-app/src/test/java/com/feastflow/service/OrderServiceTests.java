@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.feastflow.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +17,6 @@ import com.feastflow.model.Customer;
 import com.feastflow.model.Order;
 import com.feastflow.model.RestaurantMenu;
 import com.feastflow.model.RestaurantTable;
-import com.feastflow.repository.ICartItemRepository;
-import com.feastflow.repository.ICartRepository;
-import com.feastflow.repository.ICustomerRepository;
-import com.feastflow.repository.IOrderRepository;
-import com.feastflow.repository.IRestaurantTableRepository;
 import com.feastflow.service.impl.OrderService;
 
 public class OrderServiceTests {
@@ -29,6 +25,8 @@ public class OrderServiceTests {
     private ICartItemRepository cartItemRepo;
     private ICustomerRepository customerRepo;
     private IOrderRepository orderRepo;
+
+    private IOrderItemRepository orderItem;
     private IRestaurantTableRepository tableRepo;
     private OrderService orderService;
 
@@ -38,8 +36,9 @@ public class OrderServiceTests {
         cartItemRepo = mock(ICartItemRepository.class);
         customerRepo = mock(ICustomerRepository.class);
         orderRepo = mock(IOrderRepository.class);
+        orderItem = mock(IOrderItemRepository.class);
         tableRepo = mock(IRestaurantTableRepository.class);
-        orderService = new OrderService(cartRepo, cartItemRepo, customerRepo, orderRepo, tableRepo);
+        orderService = new OrderService(cartRepo, cartItemRepo, customerRepo, orderRepo, tableRepo, orderItem);
     }
 
     @Test
