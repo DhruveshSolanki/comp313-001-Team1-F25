@@ -10,6 +10,12 @@ export enum ApiMethod {
 export enum PostURL {
     // Example: CREATE_USER = '/api/user/create'
     POST_RESTAURANT_MENU = '/api/v1/restaurantmenu',
+
+    //AUTH ENDPOINTS
+    POST_LOGIN = '/api/v1/auth/login',
+    POST_REGISTER = '/api/v1/auth/register',
+    POST_LOGOUT = '/api/v1/auth/logout',
+    POST_REFRESH = '/api/v1/auth/refresh'
 }
 
 // Enum for GET endpoint URLs (add your GET endpoints here)

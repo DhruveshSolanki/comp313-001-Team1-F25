@@ -22,7 +22,7 @@ public class JwtTokenProviderTests {
 
     @Test
     void generateAndValidateStaffToken() {
-        String token = provider.generateToken("chef@example.com", RestaurantStaffRole.CHEF);
+        String token = provider.generateToken("chef@example.com", RestaurantStaffRole.CHEF,"UNKNOWN");
         assertNotNull(token);
         assertTrue(provider.validateToken(token));
         assertEquals("chef@example.com", provider.getSubject(token));
@@ -31,7 +31,7 @@ public class JwtTokenProviderTests {
 
     @Test
     void generateAndValidateCustomerToken() {
-        String token = provider.generateCustomerToken("cust@example.com");
+        String token = provider.generateCustomerToken("cust@example.com", "UNKNOWN");
         assertNotNull(token);
         assertTrue(provider.validateToken(token));
         assertEquals("cust@example.com", provider.getSubject(token));

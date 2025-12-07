@@ -59,7 +59,7 @@ public class AuthControllerTests {
         when(staffRepository.findByStaffEmail("chef@example.com")).thenReturn(Optional.of(
                 RestaurantStaff.builder().staffEmail("chef@example.com").staffPassword("pw").role(RestaurantStaffRole.CHEF).build()
         ));
-        when(jwtTokenProvider.generateToken("chef@example.com", RestaurantStaffRole.CHEF)).thenReturn("token123");
+        when(jwtTokenProvider.generateToken("chef@example.com", RestaurantStaffRole.CHEF, "UNKNOWN")).thenReturn("token123");
 
     LoginResponse res = controller.login(req).getBody();
         assertNotNull(res);
@@ -78,7 +78,7 @@ public class AuthControllerTests {
         when(customerRepository.findByCustomerEmail("cust@example.com")).thenReturn(Optional.of(
                 Customer.builder().customerEmail("cust@example.com").customerPassword("pw").build()
         ));
-        when(jwtTokenProvider.generateCustomerToken("cust@example.com")).thenReturn("ctoken");
+        when(jwtTokenProvider.generateCustomerToken("cust@example.com", "UNKNOWN")).thenReturn("ctoken");
 
     LoginResponse res = controller.login(req).getBody();
         assertNotNull(res);

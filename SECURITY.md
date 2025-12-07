@@ -4,7 +4,7 @@
 This document describes the JWT-based authentication mechanism and Swagger (OpenAPI) bearer token integration added to the FeastFlow backend.
 
 ## Authentication Flow
-1. Client submits POST `/api/auth/login` with JSON body:
+1. Client submits POST `/api/v1/auth/login` with JSON body:
    ```json
    { "email": "user@example.com", "password": "plaintextPassword" }
    ```
@@ -23,8 +23,8 @@ This document describes the JWT-based authentication mechanism and Swagger (Open
    ```http
    Authorization: Bearer <JWT>
    ```
-5. Protected endpoints (all except `/api/auth/**` and Swagger docs) require a valid access token.
-6. To renew an access token, POST the refresh token to `/api/auth/refresh` (raw body containing the token). The original refresh token remains valid until its own expiration.
+5. Protected endpoints (all except `/api/v1/auth/**` and Swagger docs) require a valid access token.
+6. To renew an access token, POST the refresh token to `/api/v1/auth/refresh` (raw body containing the token). The original refresh token remains valid until its own expiration.
 
 ## Token Details
 - Algorithm: HS256
@@ -80,7 +80,7 @@ export SECURITY_JWT_SECRET="<generated>"
 ## Testing Instructions
 After building (`./mvnw clean package`), run the app and execute:
 ```bash
-curl -X POST http://localhost:8080/api/auth/login \
+curl -X POST http://localhost:8080/api/v1/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"email":"staff@example.com","password":"password"}'
 ```

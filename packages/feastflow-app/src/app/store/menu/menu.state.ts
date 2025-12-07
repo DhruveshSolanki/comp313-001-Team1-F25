@@ -50,11 +50,10 @@ export class MenuState {
   addMenuItem(ctx: StateContext<MenuStateModel>, { item }: AddMenuItem) {
     this.commonService.addRestaurantMenu(item).subscribe({
       next: (response: any) => {
-        if (response && response.success) {
-          const state = ctx.getState();
-          ctx.patchState({ items: [...state.items, item] });
-          this.getMenuItems(ctx).subscribe(); // Refresh the menu items after adding
-        }
+        // Optimistically patch local state, then refresh from backend to ensure consistency
+        const state = ctx.getState();
+        ctx.patchState({ items: [...state.items, item] });
+        this.getMenuItems(ctx).subscribe(); // Refresh the menu items after adding
       },
       error: (error) => {
         console.error('Error adding menu item:', error);
@@ -67,11 +66,11 @@ export class MenuState {
   editMenuItem(ctx: StateContext<MenuStateModel>, { item }: EditMenuItem) {
     this.commonService.updateRestaurantMenu(item).subscribe({
       next: (response: any) => {
-        if (response && response.success) {
-          const state = ctx.getState();
-          const items = state.items.map(i => i.itemId === item.itemId ? item : i);
-          ctx.patchState({ items });
-        }
+        // Optimistically update local state, then refresh from backend to ensure consistency
+        const state = ctx.getState();
+        const items = state.items.map(i => i.itemId === item.itemId ? item : i);
+        ctx.patchState({ items });
+        this.getMenuItems(ctx).subscribe(); // Refresh after edit
       },
       error: (error) => {
         console.error('Error updating menu item:', error);
@@ -84,12 +83,11 @@ export class MenuState {
   deleteMenuItem(ctx: StateContext<MenuStateModel>, { menuId }: DeleteMenuItem) {
     this.commonService.deleteRestaurantMenu(menuId).subscribe({
       next: (response: any) => {
-        if (response && response.success) {
-          const state = ctx.getState();
-          const filteredItems = state.items.filter((item) => item?.itemId !== menuId);
-          ctx.patchState({ items: filteredItems });
-          this.getMenuItems(ctx).subscribe(); // Refresh the menu items after deletion
-        }
+        // Optimistically remove from local state, then refresh from backend
+        const state = ctx.getState();
+        const filteredItems = state.items.filter((item) => item?.itemId !== menuId);
+        ctx.patchState({ items: filteredItems });
+        this.getMenuItems(ctx).subscribe(); // Refresh the menu items after deletion
       },
       error: (error) => {
         console.error('Error deleting menu item:', error);

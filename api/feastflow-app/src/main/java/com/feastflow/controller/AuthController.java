@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Tag(name = "Authentication API")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -60,17 +60,19 @@ public class AuthController {
         String role;
         if (staffOpt.isPresent()) {
             RestaurantStaffRole staffRole = staffOpt.get().getRole();
-            token = jwtTokenProvider.generateToken(email, staffRole);
+            String roleId = staffOpt.get().getStaffId();
+            token = jwtTokenProvider.generateToken(email, staffRole, roleId);
             role = staffRole != null ? staffRole.name() : "USER";
         } else {
             Optional<Customer> customerOpt = customerRepository.findByCustomerEmail(email);
+            String roleId = customerOpt.map(Customer::getCustomerId).orElse("UNKNOWN");
             if (customerOpt.isEmpty()) {
                 // Shouldn't happen because authentication succeeded, but fallback
                 role = "USER";
-                token = jwtTokenProvider.generateCustomerToken(email);
+                token = jwtTokenProvider.generateCustomerToken(email, roleId);
             } else {
                 role = "CUSTOMER";
-                token = jwtTokenProvider.generateCustomerToken(email);
+                token = jwtTokenProvider.generateCustomerToken(email, roleId);
             }
         }
 
@@ -94,11 +96,13 @@ public class AuthController {
         String newAccessToken;
         if (staffOpt.isPresent()) {
             RestaurantStaffRole staffRole = staffOpt.get().getRole();
-            newAccessToken = jwtTokenProvider.generateToken(subject, staffRole);
+            String roleId = staffOpt.get().getStaffId();
+            newAccessToken = jwtTokenProvider.generateToken(subject, staffRole, roleId);
             role = staffRole != null ? staffRole.name() : "USER";
         } else if (customerRepository.findByCustomerEmail(subject).isPresent()) {
             role = "CUSTOMER";
-            newAccessToken = jwtTokenProvider.generateCustomerToken(subject);
+            String roleId = customerRepository.findByCustomerEmail(subject).get().getCustomerId();
+            newAccessToken = jwtTokenProvider.generateCustomerToken(subject,roleId);
         } else {
             return ResponseEntity.status(401).build();
         }
