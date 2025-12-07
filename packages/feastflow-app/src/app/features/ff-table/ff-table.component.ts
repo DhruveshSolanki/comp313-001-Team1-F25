@@ -1,4 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { AddCartItem, EditCartItem, DeleteCartItem } from '../../store/cart/cart.actions';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -16,7 +18,7 @@ export class FfTableComponent implements OnInit {
   @Output() onDeleteItem = new EventEmitter<any>();
   @Output() onCartDataChange = new EventEmitter<any[]>();
   tableDataKeys?: any[];
-
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.setTableDataKeys();
@@ -93,8 +95,16 @@ export class FfTableComponent implements OnInit {
   }
 
   onAddToCart(item: any) {
-    this.cartData.push({ itemId: item.itemId, itemName: item.itemName, price: item.price, note: null, quantity: 1 });
+    // Optimistically update local cartData
+    const existing = this.cartData.find(ci => String(ci.itemId) === String(item.itemId));
+    if (existing) {
+      existing.quantity = (existing.quantity || 0) + 1;
+    } else {
+      this.cartData.push({ itemId: item.itemId, itemName: item.itemName, price: item.price, note: null, quantity: 1 });
+    }
     this.emitCartDataChange();
+    // Dispatch backend add (will refresh cart via state)
+  this.store.dispatch(new AddCartItem({ itemId: item.itemId, itemName: item.itemName, price: item.price, quantity: 1, note: '' }));
   }
 
   getCartItemQuantity(item: any): number {
@@ -104,26 +114,36 @@ export class FfTableComponent implements OnInit {
 
   // Add method to increase quantity
   increaseQuantity(item: any) {
-    const cartItem = this.cartData.find(cartItem => cartItem.itemID === item.id);
+    // For customer view, item is a menu item; find corresponding cart entry first
+    const keyId = item.itemId ?? item.id;
+    const cartItem = this.cartData.find(ci => String(ci.itemId) === String(keyId));
     if (cartItem) {
-      cartItem.quantity++;
+      cartItem.quantity = (cartItem.quantity || 0) + 1;
+      this.emitCartDataChange();
+      this.store.dispatch(new EditCartItem({ ...cartItem }));
+    } else {
+      // If not in cart yet, treat as add
+      this.onAddToCart(item);
     }
-    this.emitCartDataChange();
   }
 
   // Add method to decrease quantity
   decreaseQuantity(item: any) {
-    const cartItemIndex = this.cartData.findIndex(cartItem => cartItem.itemID === item.id);
+    const keyId = item.itemId ?? item.id;
+    const cartItemIndex = this.cartData.findIndex(ci => String(ci.itemId) === String(keyId));
     if (cartItemIndex !== -1) {
       const cartItem = this.cartData[cartItemIndex];
-      if (cartItem.quantity > 1) {
-        cartItem.quantity--;
+      if ((cartItem.quantity || 0) > 1) {
+        cartItem.quantity -= 1;
+        this.emitCartDataChange();
+        this.store.dispatch(new EditCartItem({ ...cartItem }));
       } else {
         // Remove item from cart if quantity becomes 0
         this.cartData.splice(cartItemIndex, 1);
+        this.emitCartDataChange();
+        this.store.dispatch(new DeleteCartItem(cartItem.cartItemId || cartItem.itemId));
       }
     }
-    this.emitCartDataChange();
   }
 
   // Emit cartData changes to parent

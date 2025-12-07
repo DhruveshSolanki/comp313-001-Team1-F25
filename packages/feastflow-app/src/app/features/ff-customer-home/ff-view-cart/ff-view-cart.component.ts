@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
+import { CartState } from '../../../store/cart/cart.state';
+import { GetCartItems } from '../../../store/cart/cart.actions';
 
 @Component({
   selector: 'ff-view-cart',
@@ -9,22 +11,20 @@ import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
 })
 export class FfViewCartComponent {
   cartItems: any[] = [];
+  columns: string[] = ['Item Name', 'Price', 'Note'];
 
   constructor(private store: Store, private sideBarTitleService: SideBarTitleService) {
-    this.store.select(state => state.cart.items).subscribe(items => {
+    this.store.select(CartState.getState).subscribe(items => {
       this.cartItems = items || [];
     });
-   }
+  }
 
-  columns: string[] = ['Item Name', 'Price', 'Note', 'Actions'];
-
-  onBack(){
+  onBack() {
     this.sideBarTitleService.changeCustomerSideBarTitle("Explore Menu");
   }
 
   placeOrder() {
     if (window.confirm('Are you sure you want to place the order?')) {
-      // You can dispatch an action here to place the order if needed
       window.alert('Order placed successfully!');
       this.sideBarTitleService.changeCustomerSideBarTitle("Explore Menu");
     }

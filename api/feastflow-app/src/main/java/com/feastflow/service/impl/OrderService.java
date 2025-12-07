@@ -53,7 +53,7 @@ public class OrderService implements IOrderService {
         // Load customer & cart
         Customer customer = customerRepo.findByCustomerEmail(customerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
-        Cart cart = cartRepo.findByCustomer_CustomerEmail(customerEmail)
+        Cart cart = cartRepo.findByCustomerEmail(customerEmail)
                 .orElseThrow(() -> new IllegalStateException("Cart is empty or not found for customer."));
 
         // Load cart items

@@ -53,7 +53,7 @@ public class CartController {
     @Operation(summary = "Update item quantity in my cart")
     public ResponseEntity<Cart> updateItem(@PathVariable String cartItemId, @RequestBody Map<String, Object> body) {
         String email = SecurityUtils.getCurrentUserEmail();
-        int quantity = ((Number) body.getOrDefault("quantity", 1)).intValue();
+        int quantity = ((Number) body.getOrDefault("quantity", 0)).intValue();
         String note = (String) body.get("note");
         return ResponseEntity.ok(cartService.updateItem(email, cartItemId, quantity, note));
     }

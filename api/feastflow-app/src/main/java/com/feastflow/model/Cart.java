@@ -20,8 +20,7 @@ public class Cart {
     @Id
     private String cartId;
 
-    @DBRef
-    private Customer customer;
+    private String customerEmail;
 
     @DBRef
     private List<CartItem> cartItems;
