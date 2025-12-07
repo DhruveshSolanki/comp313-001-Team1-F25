@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../../store/auth/auth.state';
+import { Login } from '../../store/auth/auth.action';
 
 @Component({
   selector: 'ff-login',
@@ -10,7 +14,7 @@ import { Router } from '@angular/router';
 export class FfLoginComponent implements OnInit {
   
   loginForm!: FormGroup;
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute, private auth: AuthService, private store: Store) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
@@ -26,35 +30,20 @@ export class FfLoginComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const formData = {
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      };
-      // Hardcoded login logic
-      if (formData.email === 'manager@example.com' && formData.password === 'manager123') {
-        // Navigate to manager component
-        this.router.navigate(['/home']);
-        console.log('Navigating to Manager Component');
-      } else if (formData.email === 'staff@example.com' && formData.password === 'staff123') {
-        // Navigate to staff component
-        // Example: this.router.navigate(['/staff']);
-       this.router.navigate(['/restaurant-staff']);
-      } else if (formData.email === 'customer@example.com' && formData.password === 'customer123') {
-        // Navigate to customer component
-        // Example: this.router.navigate(['/customer']);
-        this.router.navigate(['/customer-home']);
-      } else if (formData.email === 'admin@example.com' && formData.password === 'admin123') {
-        // Navigate to admin component
-        this.router.navigate(['/system-manager']);
-      } else {
-        console.log('Invalid credentials');
-      }
-      // Handle login logic here
-    } else {
-      console.log('Form is invalid');
+    if (!this.loginForm.valid) {
       this.markFormGroupTouched();
+      return;
     }
+
+    const email = String(this.email?.value || '');
+    const password = String(this.password?.value || '');
+    // Dispatch NGXS auth login action; navigate based on stored role
+    this.store.dispatch(new Login(email, password)).subscribe({
+      next: () => this.navigatePostLogin(),
+      error: err => {
+        console.log('Login failed', err);
+      }
+    });
   }
 
   private markFormGroupTouched() {
@@ -71,5 +60,19 @@ export class FfLoginComponent implements OnInit {
 
   get password() {
     return this.loginForm.get('password');
+  }
+
+  private navigatePostLogin() {
+    const redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl');
+    if (redirectUrl) {
+      this.router.navigateByUrl(redirectUrl);
+      return;
+    }
+    // Prefer role from NGXS state; fallback to service/localStorage
+    const role = (this.store.selectSnapshot(AuthState.role) || this.auth.getRole() || '').toUpperCase();
+    if (role === 'CUSTOMER') this.router.navigate(['/customer-home']);
+    else if (role === 'SERVER' || role === 'CHEF') this.router.navigate(['/restaurant-staff']);
+    else if (role === 'ADMIN' || role === 'MANAGER') this.router.navigate(['/home']);
+    else this.router.navigate(['/login']);// Default fallback
   }
 }

@@ -30,25 +30,27 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String subject, RestaurantStaffRole role) {
+    public String generateToken(String subject, RestaurantStaffRole role, String roleId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMillis);
 
         return Jwts.builder()
                 .subject(subject)
                 .claim("role", role != null ? role.name() : null)
+                .claim("roleId", roleId)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    public String generateCustomerToken(String subject) {
+    public String generateCustomerToken(String subject, String roleId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMillis);
         return Jwts.builder()
                 .subject(subject)
                 .claim("role", "CUSTOMER")
+                .claim("roleId", roleId)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(getSigningKey())
