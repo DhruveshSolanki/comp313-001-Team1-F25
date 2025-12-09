@@ -17,7 +17,7 @@
             </div>
 
             <div class="ff-filter mt-2" *ngIf="homeTitle === 'Explore Menu'">
-                <i class="bi bi-sliders2-vertical cursor-pointer"></i>
+                <i class="bi bi-sliders2-vertical cursor-pointer" (click)="openAdvancedFilters(advancedFiltersTpl)"></i>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
     </div>
     <div class="ff-customer-home-content">
         <div class="ff-customer-home-table" *ngIf="homeTitle === 'Explore Menu'">
-            <ng-container *ngFor="let category of categories | keyvalue: noSort">
+            <ng-container *ngFor="let category of filteredCategories | keyvalue: noSort">
                 <ff-table
                     userRole="customer"
                     [title]="category.key"
@@ -45,3 +45,26 @@
         <ff-floating-btn userRole="customer"></ff-floating-btn>
     </div>
 </div>
+
+<!-- Advanced Filters Dialog Template -->
+<ng-template #advancedFiltersTpl let-data>
+    <div class="ff-dialog-field">
+        <select class="ff-select" (change)="filters.category = $any($event.target).value">
+            <option value="" disabled selected>Dish Category</option>
+            <option *ngFor="let c of getKeys(categories)" [value]="c">{{c}}</option>
+        </select>
+    </div>
+    <div class="ff-dialog-field">
+        <input class="ff-input" placeholder="Ingredients" (input)="filters.ingredients = $any($event.target).value"/>
+    </div>
+    <div class="ff-dialog-field">
+        <input class="ff-input" placeholder="Restrictions" (input)="filters.restrictions = $any($event.target).value" />
+    </div>
+    <div class="ff-dialog-field">
+        <input class="ff-input" placeholder="Allergen" (input)="filters.allergen = $any($event.target).value" />
+    </div>
+    <div class="ff-dialog-actions">
+        <button class="ff-btn ff-btn-secondary" type="button" (click)="onFiltersClear()">Clear</button>
+        <button class="ff-btn ff-btn-primary" type="button" (click)="onFiltersSave()">Save</button>
+    </div>
+</ng-template>

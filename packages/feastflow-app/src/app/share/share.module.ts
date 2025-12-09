@@ -7,11 +7,12 @@ import { FfLoginModule } from '../features/ff-login/ff-login.module';
 import { FfSidebarModule } from '../features/ff-sidebar/ff-sidebar.module';
 import { FfFloatingBtnModule } from '../features/ff-floating-btn/ff-floating-btn.module';
 import { FfSearchPipe } from './ff-search.pipe';
+import { FfDialogContainerComponent } from './ff-dialog/ff-dialog-container.component';
 
 
 
 @NgModule({
-  declarations: [FfToastContainerComponent, FfSearchPipe],
+  declarations: [FfToastContainerComponent, FfSearchPipe, FfDialogContainerComponent],
   imports: [
     CommonModule,
     FfHeaderModule,
@@ -27,6 +28,7 @@ import { FfSearchPipe } from './ff-search.pipe';
     FfLoginModule,
     FfFloatingBtnModule,
     FfToastContainerComponent,
+    FfDialogContainerComponent,
     FfSearchPipe
   ]
 })

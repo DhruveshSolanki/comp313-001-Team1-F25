@@ -1,0 +1,17 @@
+<div *ngIf="state.open" class="ff-dialog-overlay" (click)="onBackdrop()">
+  <div class="ff-dialog" [ngStyle]="{ width: state.width || '640px' }" (click)="$event.stopPropagation()">
+    <div class="ff-dialog-header">
+      <h3 class="ff-dialog-title">{{ state.title }}</h3>
+      <div class="ff-dialog-close-btn">
+         <i class="bi bi-x-lg cursor-pointer" (click)="close()"></i>
+      </div>
+    </div>
+    <div class="ff-dialog-sep"></div>
+    <div class="ff-dialog-content">
+      <ng-container *ngIf="state.template"
+        [ngTemplateOutlet]="state.template"
+        [ngTemplateOutletContext]="{ $implicit: state.context }">
+      </ng-container>
+    </div>
+  </div>
+</div>
