@@ -88,6 +88,9 @@ public class SecurityConfig {
 
         // Wildcard pattern support — uncomment if hosting on Vercel/Netlify
         // config.addAllowedOriginPattern("https://*.vercel.app");
+        // Allow Firebase Hosting subdomains (web.app and firebaseapp.com)
+        config.addAllowedOriginPattern("https://*.web.app");
+        config.addAllowedOriginPattern("https://*.firebaseapp.com");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
