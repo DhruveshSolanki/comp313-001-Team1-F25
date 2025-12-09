@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.feastflow.enums.OrderItemStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.Instant;
@@ -24,6 +25,7 @@ public class OrderItem {
     private String orderItemId;
 
     @DBRef
+    @JsonIgnore // avoid recursive serialization: order -> orderItems -> order -> ...
     private Order order;
 
     @DBRef

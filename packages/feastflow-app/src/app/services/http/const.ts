@@ -16,22 +16,37 @@ export enum PostURL {
     POST_REGISTER = '/api/v1/auth/register',
     POST_LOGOUT = '/api/v1/auth/logout',
     POST_REFRESH = '/api/v1/auth/refresh'
+    ,
+    // CART ENDPOINTS
+    POST_CART_ADD_ITEM = '/api/v1/cart/me/items'
 }
 
 // Enum for GET endpoint URLs (add your GET endpoints here)
 export enum GetURL {
     // Example: FETCH_USERS = '/api/users'
-    GET_RESTAURANT_MENU = '/api/v1/restaurantmenu'
+    GET_RESTAURANT_MENU = '/api/v1/restaurantmenu',
+    // CART
+    GET_MY_CART = '/api/v1/cart/me',
+    // ORDERS
+    GET_MY_ORDERS = '/api/v1/orders/mine',
+    GET_ORDERS = '/api/v1/orders'
 }
 
 // Enum for PUT endpoint URLs (add your PUT endpoints here)
 export enum PutURL {
     // Example: UPDATE_USER = '/api/user/update'
-    PUT_RESTAURANT_MENU = '/api/v1/restaurantmenu'
+    PUT_RESTAURANT_MENU = '/api/v1/restaurantmenu',
+    // CART
+    PUT_CART_UPDATE_ITEM = '/api/v1/cart/me/items',
+    // ORDERS
+    PUT_ORDER_ITEM_STATUS = '/api/v1/orders'
 }
 
 // Enum for DELETE endpoint URLs (add your DELETE endpoints here)
 export enum DeleteURL {
     // Example: REMOVE_USER = '/api/user/remove'
-    DELETE_RESTAURANT_MENU = '/api/v1/restaurantmenu'
+    DELETE_RESTAURANT_MENU = '/api/v1/restaurantmenu',
+    // CART
+    DELETE_CART_ITEM = '/api/v1/cart/me/items',
+    DELETE_CART_CLEAR = '/api/v1/cart/me'
 }

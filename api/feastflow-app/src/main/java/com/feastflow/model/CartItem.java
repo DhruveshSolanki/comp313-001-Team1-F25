@@ -4,6 +4,7 @@ package com.feastflow.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class CartItem {
     private String cartItemId;
 
     @DBRef
+    @JsonIgnore // avoid recursive serialization of cart -> cartItems -> cart
     private Cart cart;
 
     @DBRef

@@ -1,3 +1,4 @@
+// Removed duplicate Injectable/class definition added earlier. Keeping the original service below.
 import { Injectable } from '@angular/core';
 import { HttpService } from './http/http.service';
 import { ActivatedRoute } from '@angular/router';
@@ -70,5 +71,88 @@ export class CommonHttpRequestService {
    */
   deleteRestaurantMenu(itemId: number) {
     return this.httpService.requestCall(DeleteURL.DELETE_RESTAURANT_MENU + `/${itemId}`, ApiMethod.DELETE, {});
+  }
+
+  /**
+   * Retrieves the current authenticated customer's cart from the backend.
+   * If no cart exists for the customer, the backend will create one and return it.
+   * @returns Observable with the cart payload returned by the API
+   */
+  getMyCart() {
+    return this.httpService.requestCall(GetURL.GET_MY_CART, ApiMethod.GET, {});
+  }
+
+  /**
+   * Adds an item to the customer's cart.
+   * The backend identifies the customer from the JWT and attaches the item to their cart.
+   * @param body Object containing menuItemId (string), optional quantity and optional note
+   * @returns Observable with the updated cart from the API
+   */
+  addCartItem(body: { menuItemId: string; quantity?: number; note?: string }) {
+    return this.httpService.requestCall(PostURL.POST_CART_ADD_ITEM, ApiMethod.POST, {}, body);
+  }
+
+  /**
+   * Updates a cart item belonging to the customer's cart.
+   * @param cartItemId The identifier of the cart item to update
+   * @param body Object containing new quantity and/or note
+   * @returns Observable with the updated cart from the API
+   */
+  updateCartItem(cartItemId: string, body: { quantity?: number; note?: string }) {
+    return this.httpService.requestCall(`${PutURL.PUT_CART_UPDATE_ITEM}/${cartItemId}`, ApiMethod.PUT, {}, body);
+  }
+
+  /**
+   * Removes a cart item from the customer's cart.
+   * @param cartItemId The identifier of the cart item to remove
+   * @returns Observable with the updated cart from the API
+   */
+  deleteCartItem(cartItemId: string) {
+    return this.httpService.requestCall(`${DeleteURL.DELETE_CART_ITEM}/${cartItemId}`, ApiMethod.DELETE, {});
+  }
+
+  /**
+   * Clears all items from the customer's cart.
+   * Typically used after successful checkout to empty the cart while keeping the cart entity.
+   * @returns Observable with the cleared cart from the API
+   */
+  clearMyCart() {
+    return this.httpService.requestCall(DeleteURL.DELETE_CART_CLEAR, ApiMethod.DELETE, {});
+  }
+
+  /**
+   * Lists orders for the current authenticated customer.
+   * @returns Observable with the list of orders for the customer
+   */
+  getMyOrders() {
+    return this.httpService.requestCall(GetURL.GET_MY_ORDERS, ApiMethod.GET, {});
+  }
+
+  /**
+   * Lists all orders, optionally filtered by status.
+   * @param status Optional status to filter orders by (e.g., 'PENDING', 'COMPLETED')
+   * @returns Observable with the list of orders
+   */
+  getOrders(status?: string) {
+    const params = status ? { status } as any : {};
+    return this.httpService.requestCall(GetURL.GET_ORDERS, ApiMethod.GET, params);
+  }
+
+  /**
+   * Updates the status of a specific order item for a given order.
+   *
+   * Request
+   * - Method: PUT
+   * - URL: `${PutURL.PUT_ORDER_ITEM_STATUS}/${orderId}/items/${itemId}`
+   * - Body: `{ status: 'PENDING' | 'IN_QUEUE' | 'PREPARING' | 'READY' | 'SERVED' | 'CANCELLED' | 'NOT_AVAILABLE' }`
+   *
+   * @param orderId The order identifier containing the item
+   * @param itemId The unique order item identifier to update
+   * @param status The new status enum value
+   * @returns Observable with the API response
+   */
+  updateOrderItemStatus(orderId: number | string, itemId: number | string, status: string) {
+    const url = `${PutURL.PUT_ORDER_ITEM_STATUS}/${orderId}/items/${itemId}`;
+    return this.httpService.requestCall(url, ApiMethod.PUT, {}, { itemStatus:status });
   }
 }

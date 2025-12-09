@@ -29,6 +29,7 @@ public class RestaurantMenuController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Get menu item by ID", description = "Returns a menu item by its ID")
     public ResponseEntity<Optional<RestaurantMenu>> getMenuItemById(@PathVariable String id) {
         return ResponseEntity.ok(restaurantMenuService.getMenuItemById(id));

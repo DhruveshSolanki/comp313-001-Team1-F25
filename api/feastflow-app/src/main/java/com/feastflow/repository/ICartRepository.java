@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ICartRepository extends MongoRepository<Cart, String> {
-	Optional<Cart> findByCustomer_CustomerEmail(String customerEmail);
+	Optional<Cart> findByCustomerEmail(String email);
 }
 

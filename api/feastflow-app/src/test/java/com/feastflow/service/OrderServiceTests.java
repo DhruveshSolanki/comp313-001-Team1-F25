@@ -57,7 +57,7 @@ public class OrderServiceTests {
         when(tableRepo.findById("t1")).thenReturn(Optional.of(table));
         when(orderRepo.save(any(Order.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        Order order = orderService.checkout("cust@example.com", "t1", "notes");
+        Order order = orderService.checkout("cust@example.com", "t1");
         assertNotNull(order);
         assertEquals(OrderStatus.PLACED, order.getStatus());
         assertEquals(10.0 * 2 + 5.5 * 1, order.getTotalAmount());
@@ -73,7 +73,7 @@ public class OrderServiceTests {
         when(cartItemRepo.findByCart_CartId("cart1")).thenReturn(List.of());
 
         IllegalStateException ex = assertThrows(IllegalStateException.class, () ->
-                orderService.checkout("cust@example.com", null, null));
+                orderService.checkout("cust@example.com", null));
         assertTrue(ex.getMessage().contains("empty cart"));
     }
 }

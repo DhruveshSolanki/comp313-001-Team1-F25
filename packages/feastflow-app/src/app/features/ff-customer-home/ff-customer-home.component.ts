@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
 import { SideBarService } from 'src/app/services/side-bar.service';
-import { SetCartItems } from 'src/app/store/cart/cart.actions';
+import { GetCartItems, SetCartItems } from 'src/app/store/cart/cart.actions';
 import { CartState } from 'src/app/store/cart/cart.state';
 import { GetMenuItems } from 'src/app/store/menu/menu.actions';
 import { MenuState, MenuItem } from 'src/app/store/menu/menu.state';
@@ -18,9 +18,9 @@ export class FfCustomerHomeComponent implements OnInit, OnDestroy {
   byCategorySelector$ = this.store.select(MenuState.getState);
   sidebar: boolean = false;
 
-  columns: string[] = ['Item Name', 'Price', 'Restrictions','Ingredients', 'Actions'];
+  columns: string[] = ['Item Name', 'Price', 'Restrictions', 'Ingredients', 'Actions'];
   homeTitle!: string;
-  cartItems: any[] = []; 
+  cartItems: any[] = [];
 
   constructor(private store: Store,
     private sidebarService: SideBarService,
@@ -50,10 +50,12 @@ export class FfCustomerHomeComponent implements OnInit, OnDestroy {
           return acc;
         }, {});
       });
-
+      
+    this.store.dispatch(new GetCartItems()).subscribe(() => {
       this.store.select(CartState.getState).subscribe(items => {
         this.cartItems = items || [];
       });
+    });
   }
 
   ngOnDestroy() {

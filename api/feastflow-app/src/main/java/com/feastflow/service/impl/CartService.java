@@ -1,5 +1,6 @@
 package com.feastflow.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,13 +36,18 @@ public class CartService implements ICartService {
 
     @Override
     public Cart getOrCreateCartForCustomer(String customerEmail) {
-        return cartRepo.findByCustomer_CustomerEmail(customerEmail)
-                .orElseGet(() -> {
-                    Customer customer = customerRepo.findByCustomerEmail(customerEmail)
-                            .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
-                    Cart c = Cart.builder().customer(customer).build();
-                    return cartRepo.save(c);
-                });
+    Cart cart = cartRepo.findByCustomerEmail(customerEmail)
+        .orElseGet(() -> cartRepo.save(
+            Cart.builder()
+                .customerEmail(customerEmail)
+                .cartItems(new ArrayList<>())
+                .build()
+            )
+        );
+    // Ensure returned cart contains its items
+    List<CartItem> items = cartItemRepo.findByCart_CartId(cart.getCartId());
+    cart.setCartItems(items);
+    return cart;
     }
 
     @Override
