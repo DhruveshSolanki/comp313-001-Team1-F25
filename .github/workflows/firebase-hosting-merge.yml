@@ -21,7 +21,7 @@ jobs:
         working-directory: packages/feastflow-app
         run: |
           npm ci
-          npm run build
+          ng build --configuration production
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
