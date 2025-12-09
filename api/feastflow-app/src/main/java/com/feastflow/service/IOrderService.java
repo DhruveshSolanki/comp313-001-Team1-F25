@@ -6,7 +6,7 @@ import com.feastflow.enums.OrderStatus;
 import com.feastflow.model.Order;
 
 public interface IOrderService {
-    Order checkout(String customerEmail, String tableId, String notes);
+    Order checkout(String customerEmail, String tableId);
     List<Order> list(String status, boolean onlyMine, String customerEmail);
     Order updateStatus(String orderId, OrderStatus newStatus);
     Order updateOrderItem(String orderId, String orderItemId, Integer quantity, String note, String itemStatus);

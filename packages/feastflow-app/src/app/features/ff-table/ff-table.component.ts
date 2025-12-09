@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { Store } from '@ngxs/store';
 import { AddCartItem, EditCartItem, DeleteCartItem } from '../../store/cart/cart.actions';
 import { FormControl } from '@angular/forms';
+import { EditOrdersItem } from 'src/app/store/orders/orders.actions';
 
 @Component({
   selector: 'ff-table',
@@ -43,7 +44,8 @@ export class FfTableComponent implements OnInit {
         this.tableDataKeys = ['table', 'itemName', 'quantity'];
         break;
       case 'orderStatus':
-        this.tableDataKeys = ['table', 'itemName', 'status', 'note'];
+        // Use statusLabel for enum-aware, user-friendly display
+        this.tableDataKeys = ['table', 'itemName', 'statusLabel', 'note'];
         break;
       case 'systemManager':
         this.tableDataKeys = ['userId', 'userName', 'userRole', 'userStatus'];
@@ -54,22 +56,24 @@ export class FfTableComponent implements OnInit {
   }
 
   setStatusDropdownOptions() {
-    if (this.userRole === 'restaurantStaff') {
+  if (this.userRole === 'restaurantStaff' || this.userRole === 'orderStatus') {
+      // Central maps: enum -> user-friendly label, and next step progression
+      const LABELS: Record<string, string> = {
+        PENDING: 'Pending',
+        IN_QUEUE: 'In Queue',
+        PREPARING: 'Preparing',
+        READY: 'Ready',
+        SERVED: 'Served',
+        CANCELLED: 'Cancelled',
+        NOT_AVAILABLE: 'Not Available'
+      };
+      // We no longer compute next status; dropdown will always offer all options.
+
       this.data.forEach(item => {
-        switch (item.status) {
-          case 'In Queue':
-            item.statusOption = 'Preparing';
-            break;
-          case 'Preparing':
-            item.statusOption = 'Ready';
-            break;
-          case 'Ready':
-            item.statusOption = 'Served';
-            break;
-          default:
-            item.statusOption = 'Cancelled';
-            break;
-        }
+        const statusEnum = String(item.status || '').toUpperCase();
+        item.statusLabel = LABELS[statusEnum] ?? statusEnum;
+        // Do not set item.statusOption anymore
+        delete item.statusOption;
       });
     }
   }
@@ -152,10 +156,37 @@ export class FfTableComponent implements OnInit {
   }
 
   onStatusChange(item: any, status: string) {
-    // Update the item locally
-    item.status = status;
+    // Convert UI label back to enum if needed, and update locally
+    const LABEL_TO_ENUM: Record<string, string> = {
+      'Pending': 'PENDING',
+      'In Queue': 'IN_QUEUE',
+      'Preparing': 'PREPARING',
+      'Ready': 'READY',
+      'Served': 'SERVED',
+      'Cancelled': 'CANCELLED',
+      'Not Available': 'NOT_AVAILABLE'
+    };
+    const newEnum = LABEL_TO_ENUM[status] || String(status).toUpperCase();
+    item.status = newEnum;
+  // Recompute label for the changed item
+    const LABELS: Record<string, string> = {
+      PENDING: 'Pending',
+      IN_QUEUE: 'In Queue',
+      PREPARING: 'Preparing',
+      READY: 'Ready',
+      SERVED: 'Served',
+      CANCELLED: 'Cancelled',
+      NOT_AVAILABLE: 'Not Available'
+    };
+    item.statusLabel = LABELS[newEnum] ?? newEnum;
+    // Do not set item.statusOption anymore
+    delete item.statusOption;
 
-    this.data = this.data.map(i => i.orderId === item.orderId ? item : i);
+    // Update local list for immediate UI feedback
+    this.data = this.data.map(i => i.orderItemId === item.orderItemId ? { ...i, status: newEnum, statusLabel: item.statusLabel } : i);
+    // Dispatch to NGXS so state reflects the change
+    // If you have the action wired, uncomment the next line and ensure import
+    this.store.dispatch(new EditOrdersItem({ ...item }));
 
   }
 }

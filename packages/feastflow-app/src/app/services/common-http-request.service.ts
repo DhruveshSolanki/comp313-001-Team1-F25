@@ -1,3 +1,4 @@
+// Removed duplicate Injectable/class definition added earlier. Keeping the original service below.
 import { Injectable } from '@angular/core';
 import { HttpService } from './http/http.service';
 import { ActivatedRoute } from '@angular/router';
@@ -117,5 +118,41 @@ export class CommonHttpRequestService {
    */
   clearMyCart() {
     return this.httpService.requestCall(DeleteURL.DELETE_CART_CLEAR, ApiMethod.DELETE, {});
+  }
+
+  /**
+   * Lists orders for the current authenticated customer.
+   * @returns Observable with the list of orders for the customer
+   */
+  getMyOrders() {
+    return this.httpService.requestCall(GetURL.GET_MY_ORDERS, ApiMethod.GET, {});
+  }
+
+  /**
+   * Lists all orders, optionally filtered by status.
+   * @param status Optional status to filter orders by (e.g., 'PENDING', 'COMPLETED')
+   * @returns Observable with the list of orders
+   */
+  getOrders(status?: string) {
+    const params = status ? { status } as any : {};
+    return this.httpService.requestCall(GetURL.GET_ORDERS, ApiMethod.GET, params);
+  }
+
+  /**
+   * Updates the status of a specific order item for a given order.
+   *
+   * Request
+   * - Method: PUT
+   * - URL: `${PutURL.PUT_ORDER_ITEM_STATUS}/${orderId}/items/${itemId}`
+   * - Body: `{ status: 'PENDING' | 'IN_QUEUE' | 'PREPARING' | 'READY' | 'SERVED' | 'CANCELLED' | 'NOT_AVAILABLE' }`
+   *
+   * @param orderId The order identifier containing the item
+   * @param itemId The unique order item identifier to update
+   * @param status The new status enum value
+   * @returns Observable with the API response
+   */
+  updateOrderItemStatus(orderId: number | string, itemId: number | string, status: string) {
+    const url = `${PutURL.PUT_ORDER_ITEM_STATUS}/${orderId}/items/${itemId}`;
+    return this.httpService.requestCall(url, ApiMethod.PUT, {}, { itemStatus:status });
   }
 }

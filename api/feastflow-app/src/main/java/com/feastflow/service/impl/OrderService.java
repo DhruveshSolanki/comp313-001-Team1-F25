@@ -49,14 +49,15 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order checkout(String customerEmail, String tableId, String notes) {
+    public Order checkout(String customerEmail, String tableId) {
         // Load customer & cart
         Customer customer = customerRepo.findByCustomerEmail(customerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerEmail));
         Cart cart = cartRepo.findByCustomerEmail(customerEmail)
                 .orElseThrow(() -> new IllegalStateException("Cart is empty or not found for customer."));
 
-        // Load cart items
+        // Load cart items from repository (do NOT rely on cart.getCartItems())
+        // Cart.cartItems is intentionally not persisted/embedded to avoid recursion and heavy parent writes.
         List<CartItem> cartItems = cartItemRepo.findByCart_CartId(cart.getCartId());
         if (cartItems.isEmpty()) {
             throw new IllegalStateException("Cannot checkout with empty cart.");
@@ -74,43 +75,50 @@ public class OrderService implements IOrderService {
                     .orElseThrow(() -> new IllegalArgumentException("Table not found: " + tableId));
         }
 
-        // Build order items (detached from cart)
+        // Build order items (detached from cart). Do NOT attach to order before order is saved,
+        // because @DBRef requires target entities to have non-null ids.
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem ci : cartItems) {
             orderItems.add(OrderItem.builder()
                     .menuItem(ci.getMenuItem())
                     .quantity(ci.getQuantity())
-                    .price(ci.getMenuItem().getPrice())
+                    .price(ci.getMenuItem() != null ? ci.getMenuItem().getPrice() : null)
                     .note(ci.getNote())
                     .build());
         }
 
+        // Persist order WITHOUT orderItems first to ensure it has an id
         Order order = Order.builder()
                 .customer(customer)
                 .table(table)
-                .orderItems(orderItems)
                 .status(OrderStatus.PLACED)
-                .notes(notes)
+                .notes(null)
                 .totalAmount(total)
                 .build();
 
-                // Persist order first
-                order = orderRepo.save(order);
+        order = orderRepo.save(order);
 
-                // Persist order items with back-reference
-                        for (OrderItem oi : orderItems) {
-                        oi.setOrder(order);
-                        orderItemRepo.save(oi);
-                }
-                // Refresh list with persisted instances
-                order.setOrderItems(orderItems);
-                        order = orderRepo.save(order);
+        // Persist order items with back-reference to the now-persisted order
+        for (OrderItem oi : orderItems) {
+            oi.setOrder(order);
+            orderItemRepo.save(oi);
+        }
+
+        // Refresh list with persisted instances and attach to order
+        List<OrderItem> persistedItems = orderItemRepo.findByOrder_OrderId(order.getOrderId());
+        order.setOrderItems(persistedItems);
+        order = orderRepo.save(order);
 
         // Clear cart
-        cartItemRepo.deleteAll(cartItems);
+                cartItemRepo.deleteAll(cartItems);
 
         return order;
     }
+
+        // Helper for future reuse: always fetch items via repository
+        // private List<CartItem> loadItemsForCart(String cartId) {
+        //     return cartItemRepo.findByCart_CartId(cartId);
+        // }
 
         @Override
         public List<Order> list(String status, boolean onlyMine, String customerEmail) {

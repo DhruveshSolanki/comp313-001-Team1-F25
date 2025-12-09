@@ -26,7 +26,10 @@ export enum GetURL {
     // Example: FETCH_USERS = '/api/users'
     GET_RESTAURANT_MENU = '/api/v1/restaurantmenu',
     // CART
-    GET_MY_CART = '/api/v1/cart/me'
+    GET_MY_CART = '/api/v1/cart/me',
+    // ORDERS
+    GET_MY_ORDERS = '/api/v1/orders/mine',
+    GET_ORDERS = '/api/v1/orders'
 }
 
 // Enum for PUT endpoint URLs (add your PUT endpoints here)
@@ -34,7 +37,9 @@ export enum PutURL {
     // Example: UPDATE_USER = '/api/user/update'
     PUT_RESTAURANT_MENU = '/api/v1/restaurantmenu',
     // CART
-    PUT_CART_UPDATE_ITEM = '/api/v1/cart/me/items'
+    PUT_CART_UPDATE_ITEM = '/api/v1/cart/me/items',
+    // ORDERS
+    PUT_ORDER_ITEM_STATUS = '/api/v1/orders'
 }
 
 // Enum for DELETE endpoint URLs (add your DELETE endpoints here)

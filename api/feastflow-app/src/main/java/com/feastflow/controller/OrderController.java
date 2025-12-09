@@ -29,11 +29,9 @@ public class OrderController {
     @PostMapping("/checkout")
     @PreAuthorize("hasRole('CUSTOMER')")
     @Operation(summary = "Checkout current cart into an order (customer)")
-    public ResponseEntity<Order> checkout(@RequestBody(required = false) Map<String, Object> body) {
+    public ResponseEntity<Order> checkout(@RequestParam String tableId) {
         String email = SecurityUtils.getCurrentUserEmail();
-        String tableId = body != null ? (String) body.get("tableId") : null;
-        String notes = body != null ? (String) body.get("notes") : null;
-        return ResponseEntity.ok(orderService.checkout(email, tableId, notes));
+        return ResponseEntity.ok(orderService.checkout(email, tableId));
     }
 
     // List my orders (customer)

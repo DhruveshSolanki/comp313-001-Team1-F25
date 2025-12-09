@@ -49,9 +49,10 @@
                                     <ng-template #noAllergens>-</ng-template>
                                 </ng-container>
 
-                                <ng-container *ngSwitchCase="'status'">
+                                <ng-container *ngSwitchCase="'statusLabel'">
                                     <span class="ff-order-status"
                                         [ngClass]="{
+                                            'bg-info': item[key] === 'Pending',
                                             'bg-secondary': item[key] === 'Served',
                                             'bg-primary': item[key] === 'In Queue',
                                             'bg-danger': item[key] === 'Cancelled',
@@ -106,13 +107,17 @@
                         <td class="d-flex gap-2"
                             *ngIf="userRole === 'orderStatus'">
                                 <div class="btn-group">
-                                    <button type="button" (click)="onStatusChange(item, item.statusOption); $event.preventDefault();" class="btn ff-btn-secondary">
-                                        {{ item.statusOption || 'Change Status' }}
+                                    <!-- Primary button should always display 'Change Status' and not auto-change -->
+                                    <button type="button" class="btn ff-btn-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Change Status
                                     </button>
                                     <button type="button" class="btn ff-btn-secondary dropdown-toggle dropdown-toggle-split" id="statusDropdown{{item.orderId}}" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" [attr.aria-labelledby]="'statusDropdown' + item.orderId">
+                                        <li>
+                                            <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'Pending'); $event.preventDefault();">Mark As Pending</a>
+                                        </li>
                                         <li>
                                             <a class="dropdown-item" href="#" (click)="onStatusChange(item, 'In Queue'); $event.preventDefault();">Mark As In Queue</a>
                                         </li>
