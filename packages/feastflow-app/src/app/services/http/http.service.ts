@@ -62,10 +62,16 @@ export class HttpService {
     if (api.startsWith('assets/')) return api;
     // Normalize when using endpoint constants like '/api/v1/...'
     if (api.startsWith('/api')) {
-      // Ensure no duplicate slashes when concatenating
       const base = environment.apiBaseUrl.replace(/\/$/, '');
-      const path = api.replace(/^\//, '');
-      return `${base}/${path.replace(/^api\//, '')}`; // environment already includes /api/v1
+      const baseHasApiV1 = /\/api\/v1$/i.test(base);
+      if (baseHasApiV1) {
+        // Strip leading '/api/v1' from the requested path to avoid duplication
+        const remainder = api.replace(/^\/api\/v1/i, '');
+        return `${base}${remainder}` || base;
+      } else {
+        // Base doesn't include '/api/v1', just join base + api
+        return `${base}${api}`;
+      }
     }
     return api;
   }
