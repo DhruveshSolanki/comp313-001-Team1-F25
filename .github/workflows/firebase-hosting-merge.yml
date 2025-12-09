@@ -17,11 +17,13 @@ jobs:
           node-version: '20.0.0'
           cache: 'npm'
           cache-dependency-path: packages/feastflow-app/package-lock.json
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
       - name: Install and build frontend
         working-directory: packages/feastflow-app
         run: |
           npm ci
-          ng build --configuration production
+          npx ng build --configuration production
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
