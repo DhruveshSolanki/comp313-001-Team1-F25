@@ -40,7 +40,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* allow dropdown to render outside the avatar circle */
+  overflow: visible;
+  position: relative;
 }
 
 .ff-header .ff-header-right .ff-user-icon img {
@@ -67,6 +69,37 @@
   margin-top: 5px;
   font-size: var(--ff-font-size-lg);
   color: var(--ff-text);
+}
+
+/* Profile dropdown */
+.ff-profile-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--ff-white);
+  border: 1px solid var(--ff-border);
+  border-radius: var(--ff-radius-sm);
+  box-shadow: var(--ff-shadow-light);
+  padding: 6px;
+  min-width: 160px;
+  z-index: 1500;
+}
+
+.ff-profile-action {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--ff-text);
+  padding: 8px 10px;
+  border-radius: var(--ff-radius-sm);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ff-profile-action:hover {
+  background: var(--ff-light);
 }
 
 /* Main content area styles for ff-home component */
