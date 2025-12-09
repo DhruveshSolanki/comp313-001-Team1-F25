@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { ApiMethod } from './const';
 import { catchError } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,28 +23,51 @@ export class HttpService {
    * @returns An observable with the HTTP response.
    */
   requestCall(api: string, method: ApiMethod, headers?: any, data?: any) {
+    const fullUrl = this.buildUrl(api);
     let response;
     switch (method) {
       case ApiMethod.GET:
-        response = this.http.get(`${api}`, headers)
+        response = this.http.get(`${fullUrl}`, headers)
           .pipe(catchError((error) => this.handleError(error)));
         break;
       case ApiMethod.POST:
-        response = this.http.post(`${api}`, data, headers)
+        response = this.http.post(`${fullUrl}`, data, headers)
           .pipe(catchError((error) => this.handleError(error)));
         break;
       case ApiMethod.PUT:
-        response = this.http.put(`${api}`, data, headers)
+        response = this.http.put(`${fullUrl}`, data, headers)
           .pipe(catchError((error) => this.handleError(error)));
         break;
       case ApiMethod.DELETE:
-        response = this.http.delete(`${api}`, headers)
+        response = this.http.delete(`${fullUrl}`, headers)
           .pipe(catchError((error) => this.handleError(error)));
         break;
       default:
         throw new Error(`Unsupported API method: ${method}`);
     }
     return response;
+  }
+
+  /**
+   * Builds a full URL from a possibly relative API path.
+   * - If `api` is an absolute URL (starts with http), returns it unchanged.
+   * - If `api` starts with '/api', prefixes with environment.apiBaseUrl root.
+   * - Otherwise returns as provided (for assets or already-prefixed endpoints).
+   */
+  private buildUrl(api: string): string {
+    if (!api) return api;
+    const isAbsolute = /^https?:\/\//i.test(api);
+    if (isAbsolute) return api;
+    // Handle asset requests
+    if (api.startsWith('assets/')) return api;
+    // Normalize when using endpoint constants like '/api/v1/...'
+    if (api.startsWith('/api')) {
+      // Ensure no duplicate slashes when concatenating
+      const base = environment.apiBaseUrl.replace(/\/$/, '');
+      const path = api.replace(/^\//, '');
+      return `${base}/${path.replace(/^api\//, '')}`; // environment already includes /api/v1
+    }
+    return api;
   }
 
   /**
