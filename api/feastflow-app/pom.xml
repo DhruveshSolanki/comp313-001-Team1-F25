@@ -110,4 +110,26 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<!-- Make the JAR executable with a proper Main-Class manifest -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- Ensure the main application class is used for Start-Class -->
+					<mainClass>com.feastflow.FeastflowAppApplication</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
