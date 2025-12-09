@@ -11,10 +11,10 @@ import { RoleGuard } from './services/auth/role.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: FfLoginComponent },
-  { path: 'home', component: FfHomeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN','MANAGER'] } },
+  { path: 'home', component: FfHomeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] } },
   { path: 'customer-home', component: FfCustomerHomeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['CUSTOMER'] } },
   { path: 'restaurant-staff', component: FfRestaurantStaffComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['CHEF','SERVER','MANAGER','ADMIN'] } },
-  { path: 'system-manager', component: FfSystemManagerComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN','MANAGER'] } },
+  { path: 'system-manager', component: FfSystemManagerComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['MANAGER'] } },
   { path: '**', redirectTo: '/login' }
 ];
 

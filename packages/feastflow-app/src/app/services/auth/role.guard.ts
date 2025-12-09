@@ -20,6 +20,7 @@ export class RoleGuard implements CanActivate {
     // redirect to a sensible home by role
     const target = role === 'CUSTOMER' ? '/customer-home'
       : (role === 'SERVER' || role === 'CHEF') ? '/restaurant-staff'
+      : (role === 'MANAGER') ? '/system-manager'
       : '/home';
     return this.router.createUrlTree([target]);
   }
