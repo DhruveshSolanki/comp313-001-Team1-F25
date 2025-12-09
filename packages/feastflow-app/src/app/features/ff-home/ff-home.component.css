@@ -13,6 +13,7 @@
     padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     color: var(--ff-white);
     font-size: 36px;
@@ -60,6 +61,66 @@
 }
 
 /* Main content area styles for ff-home component */
+
+/* Filter UI */
+.ff-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem; /* space between chip and icon */
+}
+
+.ff-filter-dropdown {
+    position: absolute;
+    right: 0;
+    top: 2.2rem;
+    background: var(--ff-white);
+    color: var(--ff-text, #333);
+    border: 1px solid var(--ff-primary);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: .5rem;
+    min-width: 220px;
+    z-index: 1500;
+}
+
+.ff-filter-heading {
+    font-size: 0.9rem;
+    color: var(--ff-primary);
+    font-weight: 600;
+    padding: .25rem .5rem .5rem;
+}
+
+.ff-filter-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: .4rem .5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    color: inherit;
+    font-size: 0.9rem;
+}
+
+.ff-filter-option:hover {
+    background: var(--ff-light);
+}
+
+.ff-filter-chip {
+    background: var(--ff-white);
+    color: var(--ff-primary);
+    border: 1px solid var(--ff-white);
+    border-radius: 999px;
+    padding: .2rem .6rem; /* slightly taller for visual centering */
+    font-size: .95rem;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1; /* keep text vertically centered */
+    cursor: pointer;
+}
+
+.ff-home-header-right { display: flex; align-items: center; gap: .5rem; }
 
 @media screen and (max-width: 425px) {
 

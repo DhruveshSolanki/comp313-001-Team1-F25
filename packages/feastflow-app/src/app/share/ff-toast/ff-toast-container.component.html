@@ -1,0 +1,13 @@
+<div class="toast-container position-fixed top-0 end-0 p-3 ff-toast-container">
+  <div *ngFor="let t of toasts"
+       [ngClass]="['toast','show','mb-2', cssFor(t), 'border-0','shadow']"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex align-items-center">
+      <div class="toast-body">{{ t.message }}</div>
+      <button type="button"
+              [ngClass]="['btn-close', closeBtnClass(t), 'me-2','m-auto']"
+              (click)="dismiss(t.id)"
+              aria-label="Close"></button>
+    </div>
+  </div>
+</div>

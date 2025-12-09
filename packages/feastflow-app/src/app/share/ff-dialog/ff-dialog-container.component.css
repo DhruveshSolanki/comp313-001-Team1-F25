@@ -1,0 +1,81 @@
+.ff-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.ff-dialog {
+    background: var(--ff-white);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 6px solid var(--ff-primary);
+    max-width: 90vw;
+}
+
+.ff-dialog .ff-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px 8px 20px;
+    color: var(--ff-primary);
+    position: relative;
+}
+
+.ff-dialog .ff-dialog-header .ff-dialog-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: 2px solid var(--ff-primary);
+    border-radius: 1rem;
+    padding: 0px 4px;
+    padding-top: 4px;
+    font-size: 0.6rem;
+    font-weight: var(--ff-font-weight-bold);
+}
+
+.ff-dialog .ff-dialog-title {
+    margin: 0;
+    font-weight: var(--ff-font-weight-semibold);
+}
+
+.ff-dialog .ff-dialog-sep {
+    height: 4px;
+    background: var(--ff-primary);
+    margin: 0 20px 12px;
+    border-radius: 2px;
+}
+
+.ff-dialog .ff-dialog-content {
+    padding: 0 20px 20px;
+    color: var(--ff-text);
+}
+
+/* Utility styles for inputs within dialog if needed */
+::ng-deep .ff-dialog .ff-dialog-field {
+    margin: 1.5rem 0;
+}
+
+::ng-deep.ff-dialog .ff-dialog-field .ff-select,
+::ng-deep.ff-dialog .ff-dialog-field .ff-input {
+    width: 100%;
+    border: 1px solid var(--ff-light);
+    border-radius: var(--ff-radius-sm);
+    padding: 10px 12px;
+    background: var(--ff-light);
+    color: var(--ff-text);
+}
+
+::ng-deep.ff-dialog .ff-dialog-field .ff-input::placeholder {
+    color: var(--ff-text);
+}
+
+::ng-deep .ff-dialog .ff-dialog-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+}

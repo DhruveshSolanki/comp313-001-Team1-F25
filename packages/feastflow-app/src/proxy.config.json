@@ -1,6 +1,6 @@
 {
     "/api/v1": {
-        "target": "https://feastflow-app-567048823206.northamerica-northeast2.run.app",
+        "target": "http://localhost:8080",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"

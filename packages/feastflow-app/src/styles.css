@@ -47,3 +47,44 @@ body {
 
 
 /* Main content area styles for ff-home component */
+
+/* === REUSABLE SEARCH CONTROL === */
+.ff-search {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ff-space-sm);
+    font-size: var(--ff-font-size-sm);
+}
+
+.ff-search-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ff-search-input-wrapper .bi-search {
+    position: absolute;
+    left: var(--ff-space-sm);
+    color: var(--ff-white);
+    pointer-events: none;
+}
+
+.ff-search-input {
+    padding: var(--ff-space-xs) var(--ff-space-md);
+    padding-left: 32px; /* make room for icon */
+    border: 1px solid var(--ff-white);
+    border-radius: var(--ff-radius-sm);
+    outline: none;
+    color: var(--ff-white);
+    background: var(--ff-primary);
+    min-width: 220px;
+}
+
+.ff-search-input::placeholder {
+    color: var(--ff-light);
+}
+
+.ff-search-btn {
+    width: auto; /* override default fixed width */
+    padding: 8px 16px; /* comfortable hit area */
+}

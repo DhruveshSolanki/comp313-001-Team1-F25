@@ -24,6 +24,12 @@
     gap: 0.5rem;
 }
 
+.ff-customer-home .ff-customer-home-header .ff-customer-home-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .ff-customer-home .ff-customer-home-content {
     width: 97%;
     background: var(--ff-white);
