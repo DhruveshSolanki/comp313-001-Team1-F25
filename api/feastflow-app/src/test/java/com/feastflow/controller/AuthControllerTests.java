@@ -56,10 +56,10 @@ public class AuthControllerTests {
         req.setEmail("chef@example.com");
         req.setPassword("pw");
 
-        when(staffRepository.findByStaffEmail("chef@example.com")).thenReturn(Optional.of(
-                RestaurantStaff.builder().staffEmail("chef@example.com").staffPassword("pw").role(RestaurantStaffRole.CHEF).build()
-        ));
-        when(jwtTokenProvider.generateToken("chef@example.com", RestaurantStaffRole.CHEF, "UNKNOWN")).thenReturn("token123");
+    when(staffRepository.findByStaffEmail("chef@example.com")).thenReturn(Optional.of(
+        RestaurantStaff.builder().staffEmail("chef@example.com").staffPassword("pw").role(RestaurantStaffRole.CHEF).staffId("UNKNOWN").build()
+    ));
+    when(jwtTokenProvider.generateToken(eq("chef@example.com"), eq(RestaurantStaffRole.CHEF), anyString())).thenReturn("token123");
 
     LoginResponse res = controller.login(req).getBody();
         assertNotNull(res);
