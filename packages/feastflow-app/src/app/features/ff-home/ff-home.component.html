@@ -7,9 +7,21 @@
             <i class="bi bi-list cursor-pointer mt-1" (click)="onSidebarToggle()"></i>
             <h5 class="mb-0"> {{homeTitle}}</h5>
         </div>
-        <div class="ff-home-header-right mt-1">
-            <div class="ff-filter" *ngIf="homeTitle === 'Menu'">
-                <i class="bi bi-sliders2-vertical cursor-pointer"></i>
+        <div class="ff-home-header-right">
+            <div class="ff-filter position-relative" *ngIf="homeTitle === 'Menu'">
+                <!-- Active filter chip -->
+                <span *ngIf="selectedCategory" class="ff-filter-chip" (click)="clearFilter()">
+                    {{selectedCategory}} ×
+                </span>
+                <!-- Dropdown -->
+                <div *ngIf="showFilter" class="ff-filter-dropdown">
+                    <div class="ff-filter-heading">Filter by category</div>
+                    <button class="ff-filter-option" *ngFor="let c of getKeys(categories)" (click)="selectCategory(c)">
+                        {{c}}
+                    </button>
+                </div>
+
+                <i class="bi bi-sliders2-vertical cursor-pointer" (click)="toggleFilter()"></i>
             </div>
             <div class="ff-save"  *ngIf="homeTitle === 'Add Item' || homeTitle === 'Edit Item'">
                 <button class="btn ff-btn ff-btn-secondary btn-save" (click)="onSave()">Save</button>
@@ -22,9 +34,11 @@
     </div>
     <div class="ff-home-content">
         <div class="ff-home-table" *ngIf="homeTitle === 'Menu'">
-            <ng-container *ngFor="let category of categories | keyvalue: noSort">
-            <ff-table userRole="restaurantManager" [title]="category.key" [columns]="columns" [data]="category.value" (onEditItem)="onEdit($event)" (onDeleteItem)="onDelete($event)"></ff-table>
+            <ng-container *ngFor="let category of filteredCategories | keyvalue: noSort">
+                <ff-table userRole="restaurantManager" [title]="category.key" [columns]="columns" [data]="category.value" (onEditItem)="onEdit($event)" (onDeleteItem)="onDelete($event)"></ff-table>
             </ng-container>
+            <!-- If empty after filter -->
+            <div *ngIf="(filteredCategories | keyvalue).length === 0" class="ff-empty text-muted">No items found.</div>
         </div>
         <div class="ff-home-editmenu" *ngIf="homeTitle === 'Add Item'">
             <ff-edit-menu #editComponent [isEditable]="false" [categories]="getKeys(categories)"></ff-edit-menu>

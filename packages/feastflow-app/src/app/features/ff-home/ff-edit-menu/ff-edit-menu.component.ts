@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
 import { AddMenuItem, EditMenuItem } from 'src/app/store/menu/menu.actions';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'ff-edit-menu',
@@ -19,7 +20,7 @@ export class FfEditMenuComponent implements OnInit {
 
   menuItemForm!: FormGroup;
 
-  constructor(private store: Store, private sideBarTitleService: SideBarTitleService) {
+  constructor(private store: Store, private sideBarTitleService: SideBarTitleService, private toast: ToastService) {
     this.menuItemForm = new FormGroup({
       itemName: new FormControl(this.menuItem?.itemName || '', Validators.required),
       category: new FormControl(this.menuItem?.category || '', Validators.required),
@@ -113,10 +114,16 @@ export class FfEditMenuComponent implements OnInit {
         this.store.dispatch(new EditMenuItem({
           itemId: this.menuItem.itemId,
           ...formData
-        }));
+        })).subscribe({
+          next: () => this.toast.success('Item updated successfully'),
+          error: () => this.toast.error('Failed to update item')
+        });
       } else {
         // Dispatch an action to create a new menu item
-        this.store.dispatch(new AddMenuItem(formData));
+        this.store.dispatch(new AddMenuItem(formData)).subscribe({
+          next: () => this.toast.success('Item added successfully'),
+          error: () => this.toast.error('Failed to add item')
+        });
       }
       this.menuItemForm.reset();
       this.sideBarTitleService.changeRestaurantManagerSideBarTitle('Menu');
@@ -124,4 +131,6 @@ export class FfEditMenuComponent implements OnInit {
       console.error('Form is invalid');
     }
   }
+
+  // Toasts are now handled globally via ToastService + ff-toast-container
 }

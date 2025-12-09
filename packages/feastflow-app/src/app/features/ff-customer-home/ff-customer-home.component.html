@@ -8,7 +8,15 @@
             <h5 class="mb-0"> {{homeTitle}}</h5>
         </div>
         <div class="ff-customer-home-header-right mt-1">
-            <div class="ff-filter" *ngIf="homeTitle === 'Explore Menu'">
+            <!-- Reusable search control (no button, live filtering) -->
+            <div class="ff-search" *ngIf="homeTitle === 'Explore Menu'">
+                <div class="ff-search-input-wrapper">
+                    <i class="bi bi-search"></i>
+                    <input class="ff-search-input" type="text" placeholder="Search" (input)="searchQuery = $any($event.target).value" />
+                </div>
+            </div>
+
+            <div class="ff-filter mt-2" *ngIf="homeTitle === 'Explore Menu'">
                 <i class="bi bi-sliders2-vertical cursor-pointer"></i>
             </div>
         </div>
@@ -19,7 +27,14 @@
     <div class="ff-customer-home-content">
         <div class="ff-customer-home-table" *ngIf="homeTitle === 'Explore Menu'">
             <ng-container *ngFor="let category of categories | keyvalue: noSort">
-            <ff-table userRole="customer" [title]="category.key" [columns]="columns" [data]="category.value" (onCartDataChange)="onCartDataChange($event)" [cartData]="cartItems"></ff-table>
+                <ff-table
+                    userRole="customer"
+                    [title]="category.key"
+                    [columns]="columns"
+                    [data]="(category.value | ffSearch: searchQuery)"
+                    (onCartDataChange)="onCartDataChange($event)"
+                    [cartData]="cartItems">
+                </ff-table>
             </ng-container>
         </div>
         <div class="ff-customer-view-cart" *ngIf="homeTitle === 'View Cart'">

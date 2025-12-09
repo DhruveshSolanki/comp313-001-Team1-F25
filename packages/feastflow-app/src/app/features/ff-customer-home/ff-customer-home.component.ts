@@ -21,6 +21,8 @@ export class FfCustomerHomeComponent implements OnInit, OnDestroy {
   columns: string[] = ['Item Name', 'Price', 'Restrictions', 'Ingredients', 'Actions'];
   homeTitle!: string;
   cartItems: any[] = [];
+  // Live search query used by ffSearch pipe
+  searchQuery: string = '';
 
   constructor(private store: Store,
     private sidebarService: SideBarService,
