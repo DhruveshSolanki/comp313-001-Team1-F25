@@ -155,4 +155,36 @@ export class CommonHttpRequestService {
     const url = `${PutURL.PUT_ORDER_ITEM_STATUS}/${orderId}/items/${itemId}`;
     return this.httpService.requestCall(url, ApiMethod.PUT, {}, { itemStatus:status });
   }
+
+  /**
+   * Calls backend to get AI-suggested allergens based on ingredients.
+   * @param body { ingredients: string[] }
+   */
+  getAiAllergens(body: { ingredients: string[] }) {
+    return this.httpService.requestCall(PostURL.POST_AI_ALLERGENS_SUGGEST, ApiMethod.POST, {}, body);
+  }
+
+  // -------- STAFF (System Manager) --------
+  getStaff() {
+    return this.httpService.requestCall(GetURL.GET_STAFF, ApiMethod.GET, {});
+  }
+
+  createStaff(body: any) {
+    return this.httpService.requestCall(PostURL.POST_STAFF, ApiMethod.POST, {}, body);
+  }
+
+  updateStaff(id: string, body: any) {
+    const url = `${PutURL.PUT_STAFF}/${id}`;
+    return this.httpService.requestCall(url, ApiMethod.PUT, {}, body);
+  }
+
+  changeStaffStatus(id: string, status: string) {
+    const url = `${PutURL.PUT_STAFF_STATUS}/${id}/status?status=${encodeURIComponent(status)}`;
+    return this.httpService.requestCall(url, ApiMethod.PUT, {}, {});
+  }
+
+  deleteStaff(id: string) {
+    const url = `${DeleteURL.DELETE_STAFF}/${id}`;
+    return this.httpService.requestCall(url, ApiMethod.DELETE, {});
+  }
 }

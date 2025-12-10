@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.feastflow.enums.RestaurantStaffRole;
+import com.feastflow.enums.RestaurantStaffStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,6 @@ public class RestaurantStaff {
     private String staffPhoneNumber;
 
     private RestaurantStaffRole role;
+
+    private RestaurantStaffStatus status;
 }

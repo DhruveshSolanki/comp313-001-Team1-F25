@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { SideBarTitleService } from 'src/app/services/side-bar-title.service';
-import { AddMenuItem, EditMenuItem } from 'src/app/store/menu/menu.actions';
+import { AddMenuItem, EditMenuItem, GetAiAllergensSuggestions } from 'src/app/store/menu/menu.actions';
 import { ToastService } from 'src/app/services/toast.service';
+import { DialogService } from 'src/app/share/ff-dialog/dialog.service';
+import { CommonHttpRequestService } from 'src/app/services/common-http-request.service';
 
 @Component({
   selector: 'ff-edit-menu',
@@ -19,8 +21,14 @@ export class FfEditMenuComponent implements OnInit {
   ingredient: string = '';
 
   menuItemForm!: FormGroup;
+  aiAllergens: string[] = [];
+  selectedAiAllergens = new Set<string>();
 
-  constructor(private store: Store, private sideBarTitleService: SideBarTitleService, private toast: ToastService) {
+  constructor(private store: Store,
+              private sideBarTitleService: SideBarTitleService,
+              private toast: ToastService,
+              private dialog: DialogService,
+              private commonService: CommonHttpRequestService) {
     this.menuItemForm = new FormGroup({
       itemName: new FormControl(this.menuItem?.itemName || '', Validators.required),
       category: new FormControl(this.menuItem?.category || '', Validators.required),
@@ -133,4 +141,48 @@ export class FfEditMenuComponent implements OnInit {
   }
 
   // Toasts are now handled globally via ToastService + ff-toast-container
+
+  // ----- AI allergens dialog -----
+  openAiAllergens(tpl: TemplateRef<any>) {
+    // Build ingredient list string from form
+    const ingList: string[] = (this.ingredients?.controls || []).map(c => String(c.value || ''));
+
+    if (ingList.length === 0) {
+      this.toast.error('Please add ingredients first');
+      return;
+    }
+
+    const payload = { ingredients: ingList };
+    // Dispatch action to fetch suggestions via state
+    this.store.dispatch(new GetAiAllergensSuggestions(payload)).subscribe({
+      next: () => {
+        const suggestions = this.store.selectSnapshot((state: any) => state.menu?.aiSuggestions ?? []);
+        this.aiAllergens = suggestions;
+        this.selectedAiAllergens = new Set<string>();
+        this.dialog.open(tpl, { title: 'Suggested Allergens', width: '520px' });
+      },
+      error: () => {
+        this.toast.error('Failed to fetch AI allergens');
+      }
+    });
+  }
+
+  toggleAiAllergen(name: string, checked: boolean) {
+    if (checked) this.selectedAiAllergens.add(name);
+    else this.selectedAiAllergens.delete(name);
+  }
+
+  onAiDialogClear() {
+    this.selectedAiAllergens.clear();
+  }
+
+  onAiDialogSave() {
+    // Add selected allergens into FormArray if not present
+    const current = new Set<string>((this.allergens.controls || []).map(c => String(c.value || '')));
+    this.selectedAiAllergens.forEach(a => {
+      if (!current.has(a)) this.allergens.push(new FormControl(a));
+    });
+    this.dialog.close();
+    this.toast.success('Allergens added');
+  }
 }

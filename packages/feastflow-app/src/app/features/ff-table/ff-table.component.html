@@ -60,6 +60,15 @@
                                             'bg-warning': item[key] === 'Preparing'
                                         }">{{ item[key] }}</span>
                                 </ng-container>
+                                <!-- Display friendly staff id for System Manager tables -->
+                                <ng-container *ngSwitchCase="'userId'">
+                                    <span *ngIf="userRole === 'systemManager'; else rawId">
+                                        {{ item['userId'] | staffId:item['userRole'] }}
+                                    </span>
+                                    <ng-template #rawId>
+                                        {{ item[key] }}
+                                    </ng-template>
+                                </ng-container>
                                 <ng-container *ngSwitchDefault>
                                     {{ item[key] }}
                                 </ng-container>

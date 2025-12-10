@@ -23,3 +23,8 @@ export class DeleteMenuItem {
   static readonly type = '[Menu] Delete item';
   constructor(readonly menuId: number) { }
 }
+
+export class GetAiAllergensSuggestions {
+  static readonly type = '[Menu] Get AI Allergens Suggestions';
+  constructor(public payload: { ingredients: string[] }) {}
+}

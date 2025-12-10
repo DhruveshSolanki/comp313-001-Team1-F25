@@ -60,6 +60,11 @@ export class HttpService {
     if (isAbsolute) return api;
     // Handle asset requests
     if (api.startsWith('assets/')) return api;
+    // Special-case AI predict endpoint: route via environment.aiPredictBaseUrl
+    if (api.startsWith('/predict')) {
+      const base = (environment as any).aiPredictBaseUrl?.replace(/\/$/, '') || '';
+      return `${base}${api}`;
+    }
     // Normalize when using endpoint constants like '/api/v1/...'
     if (api.startsWith('/api')) {
       const base = environment.apiBaseUrl.replace(/\/$/, '');

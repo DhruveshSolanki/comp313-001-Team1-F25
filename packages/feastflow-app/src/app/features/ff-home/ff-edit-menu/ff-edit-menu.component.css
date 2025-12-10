@@ -129,8 +129,24 @@
     margin-bottom: 0.25rem;
 }
 
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list .ff-allergy-warnings-input{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list input::placeholder {
     color: var(--ff-primary);
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list .input-group {
+   flex-wrap: nowrap;
+}
+
+.ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-add-list .input-group button {
+    margin-bottom: 0.25rem;
+    border-radius: var(--ff-radius-md);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .ff-edit-menu .ff-edit-menu-form .ff-edit-menu-right .ff-list-container .ff-btn-remove {
