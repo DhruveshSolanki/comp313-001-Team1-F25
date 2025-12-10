@@ -9,7 +9,8 @@
         </div>
         <div class="ff-system-manager-header-right mt-1">
             <div class="ff-filter">
-                <i class="bi bi-sliders2-vertical cursor-pointer"></i>
+                <!-- Use filter icon to open Add Employee dialog -->
+                <i class="bi bi-sliders2-vertical cursor-pointer" (click)="openAddEmployeeDialog()"></i>
             </div>
         </div>
     </div>
@@ -17,8 +18,101 @@
         <ff-sidebar userRole="systemManager" (homeTitle)="onHomeTitleChange($event)"></ff-sidebar>
     </div>
     <div class="ff-system-manager-content">
-        <div class="ff-system-manager-table" *ngIf="homeTitle === 'Staff'">
-            <ff-table userRole="systemManager" [columns]="columns" [data]="userData" (onDeleteItem)="onDelete($event)"></ff-table>
-        </div>
+                <div class="ff-system-manager-table" *ngIf="homeTitle === 'Staff'">
+                        <ff-table userRole="systemManager"
+                                            [columns]="columns"
+                                            [data]="userData"
+                                            (onEditItem)="onEdit($event)"
+                                            (onDeleteItem)="onDelete($event)"></ff-table>
+                </div>
     </div>
 </div>
+
+<!-- Add Employee Dialog Template -->
+<ng-template #addEmployeeTpl>
+        <form class="ff-employee-form" [formGroup]="employeeForm" (ngSubmit)="submitAddEmployee()">
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffName" placeholder="Name" />
+            </div>
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffEmail" type="email" placeholder="Email" />
+            </div>
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffPhoneNumber" placeholder="Phone" />
+            </div>
+            <div class="ff-dialog-field">
+                <select class="ff-select" formControlName="role">
+                    <option value="MANAGER">MANAGER</option>
+                    <option value="CHEF">CHEF</option>
+                    <option value="SERVER">SERVER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
+            <div class="ff-dialog-field">
+                <select class="ff-select" formControlName="status">
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                </select>
+            </div>
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffPassword" type="password" placeholder="Password" />
+            </div>
+                <div class="ff-dialog-field">
+                    <input class="ff-input" formControlName="confirmPassword" type="password" placeholder="Confirm password" />
+                </div>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-light" (click)="dialog.close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+    </ng-template>
+
+<!-- Edit Employee Dialog Template -->
+<ng-template #editEmployeeTpl let-data="$implicit">
+        <form class="ff-employee-form" [formGroup]="employeeForm" (ngSubmit)="submitEditEmployee(data?.id)">
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffName" placeholder="Name" />
+            </div>
+                <div class="ff-dialog-field">
+                    <input class="ff-input" formControlName="staffEmail" type="email" placeholder="Email" [disabled]="true" />
+                </div>
+            <div class="ff-dialog-field">
+                <input class="ff-input" formControlName="staffPhoneNumber" placeholder="Phone" />
+            </div>
+            <div class="ff-dialog-field">
+                <select class="ff-select" formControlName="role">
+                    <option value="MANAGER">MANAGER</option>
+                    <option value="CHEF">CHEF</option>
+                    <option value="SERVER">SERVER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
+            <div class="ff-dialog-field">
+                <select class="ff-select" formControlName="status">
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                </select>
+            </div>
+                <div class="ff-dialog-field">
+                    <input class="ff-input" formControlName="staffPassword" type="password" placeholder="New password (optional)" />
+                </div>
+                <div class="ff-dialog-field">
+                    <input class="ff-input" formControlName="confirmPassword" type="password" placeholder="Confirm new password" />
+                </div>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-light" (click)="dialog.close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+    </ng-template>
+
+<!-- Delete Confirm Dialog Template -->
+<ng-template #deleteConfirmTpl>
+    <div class="p-2">
+        <p>Are you sure you want to delete this employee?</p>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-light" (click)="dialog.close(false)">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="dialog.close(true)">Delete</button>
+        </div>
+    </div>
+    </ng-template>

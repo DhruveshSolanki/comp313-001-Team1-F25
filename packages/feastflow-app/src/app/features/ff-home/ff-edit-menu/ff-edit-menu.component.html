@@ -40,7 +40,12 @@
                         </li>
                     </ul>
                     <div class="ff-add-list">
-                        <input type="text" class="form-control" formControlName="newAllergen" (keyup.enter)="addWarning()" placeholder="+ Add Warnings" />
+                        <div class="input-group">
+                            <input type="text" class="form-control ff-allergy-warnings-input" formControlName="newAllergen" (keyup.enter)="addWarning()" placeholder="+ Add Warnings" />
+                            <button type="button" class="btn ff-btn-secondary .ff-allergy-warnings-btns" (click)="openAiAllergens(aiAllergensTpl)" aria-label="Suggest Allergens">
+                                <i class="bi bi-magic"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,6 +61,7 @@
                                 <button type="button" class="btn btn-sm ff-btn-remove"
                                 (click)="removeIngredient(i)">X</button>
                             </div>  
+                        </li>
                     </ul>
                     <div class="ff-add-list">
                         <input type="text" class="form-control" formControlName="newIngredient" (keyup.enter)="addIngredient()" placeholder="+ Add Ingredient" />
@@ -65,3 +71,18 @@
         </div>
     </form>
 </div>
+
+<!-- Dialog template: AI-generated allergens selection -->
+<ng-template #aiAllergensTpl let-data>
+    <div class="ff-dialog-field">
+    <div *ngIf="aiAllergens.length === 0" class="text-muted">No suggestions found.</div>
+        <div *ngFor="let allergen of aiAllergens; let idx = index" class="d-flex align-items-center gap-2 my-1">
+            <input type="checkbox" [checked]="selectedAiAllergens.has(allergen)" (change)="toggleAiAllergen(allergen, $any($event.target).checked)" />
+            <label>{{ allergen }}</label>
+        </div>
+    </div>
+    <div class="ff-dialog-actions">
+        <button class="ff-btn ff-btn-secondary" type="button" (click)="onAiDialogClear()">Clear</button>
+        <button class="ff-btn ff-btn-primary" type="button" (click)="onAiDialogSave()">Add Selected</button>
+    </div>
+</ng-template>

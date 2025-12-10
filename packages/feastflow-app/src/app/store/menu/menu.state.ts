@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { AddMenuItem, DeleteMenuItem, EditMenuItem, GetMenuItems, MenuAction } from './menu.actions';
+import { AddMenuItem, DeleteMenuItem, EditMenuItem, GetMenuItems, GetAiAllergensSuggestions, MenuAction } from './menu.actions';
 import { CommonHttpRequestService } from 'src/app/services/common-http-request.service';
 import { tap } from 'rxjs/operators';
 
@@ -13,12 +13,14 @@ export interface MenuItem {
 
 export interface MenuStateModel {
   items: MenuItem[];
+  aiSuggestions?: string[];
 }
 
 @State<MenuStateModel>({
   name: 'menu',
   defaults: {
-    items: []
+    items: [],
+    aiSuggestions: []
   }
 })
 @Injectable()
@@ -42,6 +44,18 @@ export class MenuState {
       tap((response: any) => {
         const menuItems = response || [];
         ctx.patchState({ items: menuItems });
+      })
+    );
+  }
+
+  @Action(GetAiAllergensSuggestions)
+  getAiAllergensSuggestions(ctx: StateContext<MenuStateModel>, { payload }: GetAiAllergensSuggestions) {
+    return this.commonService.getAiAllergens(payload).pipe(
+      tap((response: any) => {
+        const suggestions: string[] = Array.isArray(response)
+          ? response
+          : (Array.isArray(response?.allergens) ? response.allergens : []);
+        ctx.patchState({ aiSuggestions: suggestions });
       })
     );
   }

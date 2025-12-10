@@ -9,6 +9,8 @@ export interface User {
   userName: string;
   userRole: string;
   userStatus: string;
+  staffEmail?: string;
+  staffPhoneNumber?: string;
 }
 
 export interface UserStateModel {
@@ -40,15 +42,22 @@ export class UserState {
 
    @Action(GetUsers)
    getUsers(ctx: StateContext<UserStateModel>) {
-     return this.commonService.getDataFromAssets('user-role.json').pipe(
+     return this.commonService.getStaff().pipe(
        tap((response: any) => {
-         const users = response.userRoles || [];
-         console.log(response);
-         
+         const users = (Array.isArray(response) ? response : [])
+          .map((s: any, idx: number) => ({
+            userId: s.staffId,
+            userName: s.staffName,
+            userRole: s.role,
+            userStatus: s.status,
+            staffEmail: s.staffEmail,
+            staffPhoneNumber: s.staffPhoneNumber,
+            // displayId will be generated in UI via pipe/helper
+          }));
          ctx.patchState({ items: users });
-        })
-      );
-    }
+       })
+     );
+   }
 
 
     @Action(EditUser)
